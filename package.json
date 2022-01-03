@@ -1,0 +1,44 @@
+{
+    "name": "js-music-player",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.html",
+    "scripts": {
+        "serve": "cross-env NODE_ENV=development gulp serve",
+        "build": "cross-env NODE_ENV=development gulp build",
+        "prod": "cross-env NODE_ENV=production gulp build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "browserslist": "> 1%, last 2 versions, not dead",
+    "devDependencies": {
+        "@babel/core": "^7.16.0",
+        "@babel/preset-env": "^7.16.4",
+        "babel-loader": "^8.2.3",
+        "browser-sync": "^2.27.7",
+        "cross-env": "^7.0.3",
+        "del": "^6.0.0",
+        "gulp": "^4.0.2",
+        "gulp-autoprefixer": "^8.0.0",
+        "gulp-csso": "^4.0.1",
+        "gulp-group-css-media-queries": "^1.2.2",
+        "gulp-htmlmin": "^5.0.1",
+        "gulp-if": "^3.0.0",
+        "gulp-imagemin": "^7.1.0",
+        "gulp-newer": "^1.4.0",
+        "gulp-real-favicon": "^0.3.2",
+        "gulp-rename": "^2.0.0",
+        "gulp-sass": "^5.0.0",
+        "gulp-sourcemaps": "^3.0.0",
+        "gulp-svg-sprite": "^1.5.0",
+        "gulp-webp": "^4.0.1",
+        "sass": "^1.43.4",
+        "webpack": "^5.64.2",
+        "webpack-stream": "^7.0.0"
+    },
+    "dependencies": {
+        "core-js": "^3.19.1",
+        "normalize.css": "^8.0.1"
+    }
+}
