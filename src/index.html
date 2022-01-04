@@ -13,6 +13,37 @@
         <script src="/script.js" defer></script>
     </head>
     <body>
-        Test
+        <div class="container">
+            <header class="header">
+                <a href="/" class="header__logo">
+                    <img
+                        src="/images/logo.webp"
+                        alt="MyMusic logo"
+                        class="header__logo-image"
+                    />
+                </a>
+                <div class="header__search">
+                    <svg class="header__search-icon">
+                        <use href="/icons/icon-sprite.svg#search" />
+                    </svg>
+                    <label for="header-search" class="visually-hidden"
+                        >Search</label
+                    >
+                    <input
+                        type="text"
+                        id="header-search"
+                        class="header__search-input"
+                        placeholder="Search"
+                    />
+                </div>
+                <div class="header__avatar">
+                    <img
+                        src="/images/user-avatar-placeholder.webp"
+                        alt="User avatar image"
+                        class="header__avatar-image"
+                    />
+                </div>
+            </header>
+        </div>
     </body>
 </html>

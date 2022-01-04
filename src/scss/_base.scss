@@ -28,3 +28,17 @@ a:focus,
 button:focus {
     outline: none;
 }
+
+.visually-hidden {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+}
+
+.container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 25px;
+}
