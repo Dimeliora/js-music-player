@@ -22,7 +22,7 @@
         height: 190px;
         border-radius: 12px;
         overflow: hidden;
-        transition: transform 0.2s ease-out;
+        transition: transform 0.1s linear;
     }
 
     &__cover-image {
@@ -51,9 +51,10 @@
         transform: translate(-50%, -50%);
         visibility: hidden;
         opacity: 0;
-        width: 200px;
-        height: 190px;
+        display: block;
+        width: 110%;
+        height: 75%;
         filter: blur(45px);
-        transition: visibility 0.2s ease-out, opacity 0.2s ease-out;
+        transition: all 0.2s ease-out;
     }
 }
