@@ -41,7 +41,7 @@
         width: 100%;
         border: none;
         background-color: transparent;
-        color: #999999;
+        color: $gray-light;
         font-size: 1.4rem;
 
         &:focus {
@@ -49,7 +49,7 @@
         }
 
         &::placeholder {
-            color: #999999;
+            color: $gray-light;
         }
     }
 

@@ -10,6 +10,7 @@ html {
 
 body {
     margin: 0;
+    color: $gray;
     font-family: 'PR Root UI', sans-serif;
 }
 
@@ -27,6 +28,10 @@ li {
 a:focus,
 button:focus {
     outline: none;
+}
+
+main {
+    margin-top: 35px;
 }
 
 .visually-hidden {
