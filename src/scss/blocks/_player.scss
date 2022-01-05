@@ -3,30 +3,94 @@
     position: relative;
     flex-basis: 430px;
     margin: -30px -30px -30px 0;
+    padding: 25px 0;
     overflow: hidden;
 
     &__background {
         position: absolute;
         top: 0;
         left: 0;
+        z-index: -1;
         width: 100%;
         height: 100%;
-        background-color: #1e0f38;
+        background: #1e0f38 no-repeat center / cover;
         background-image: var(--bg-image);
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-        filter: blur(30px);
-        transform: scale(1.15);
+        filter: blur(40px);
+        transform: scale(1.2);
 
         &::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
+            z-index: -1;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.55);
+            background-color: rgba(0, 0, 0, 0.45);
         }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        padding: 0 25px;
+    }
+
+    &__cover-thumbnail {
+        width: 64px;
+        height: 64px;
+        margin-right: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    &__cover-image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__album-title {
+        margin-bottom: 3px;
+        color: #ffffff;
+        font-size: 2.2rem;
+        font-weight: 500;
+    }
+
+    &__album-artist {
+        color: $white-transparent;
+        font-size: 1.6rem;
+    }
+
+    &__album-genre {
+        color: $yellow-transparent;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+    }
+
+    &__progress {
+        margin-top: 30px;
+        padding: 0 25px;
+    }
+
+    &__progress-placeholder {
+        img {
+            max-width: 100%;
+        }
+    }
+
+    &__timestamps {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: $white-transparent;
+        font-size: 1.2rem;
+    }
+
+    &__music-list {
+        margin-top: 30px;
+        padding: 0 15px;
+        list-style-type: none;
     }
 }

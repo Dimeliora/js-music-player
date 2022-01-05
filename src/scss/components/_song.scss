@@ -1,0 +1,124 @@
+.song {
+    display: grid;
+    grid-template-columns: 25px 1fr 110px 30px;
+    column-gap: 5px;
+    align-items: center;
+    padding: 10px 8px;
+    border-radius: 6px;
+    color: $white-transparent;
+    cursor: default;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+        background-color: #fff;
+        color: $gray-light;
+
+        .song__title {
+            color: $gray;
+        }
+
+        .song__index {
+            display: none;
+        }
+
+        .song__button--play {
+            display: flex;
+        }
+    }
+
+    &:focus,
+    &:focus-within {
+        outline: none;
+    }
+
+    &--playing {
+        .song__index {
+            display: none;
+        }
+
+        .song__playing {
+            display: block;
+        }
+
+        &:hover,
+        &:focus,
+        &:focus-within {
+            .song__playing {
+                display: none;
+            }
+
+            .song__button--play {
+                display: none;
+            }
+
+            .song__button--pause {
+                display: flex;
+            }
+        }
+    }
+
+    &__controls {
+        justify-self: center;
+    }
+
+    &__index {
+        font-size: 1.2rem;
+    }
+
+    &__button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+
+        &--play {
+            display: none;
+        }
+
+        &--pause {
+            display: none;
+        }
+
+        &:hover,
+        &:focus {
+            transform: scale(1.1);
+        }
+    }
+
+    &__icon {
+        width: 16px;
+        height: 16px;
+        fill: $yellow;
+    }
+
+    &__playing {
+        display: none;
+        width: 16px;
+        height: 16px;
+        fill: $yellow;
+    }
+
+    &__title {
+        color: #ffffff;
+        font-size: 1.6rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__artist {
+        font-size: 1.4rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__duration {
+        justify-self: end;
+        font-size: 1.2rem;
+    }
+}
