@@ -43,7 +43,15 @@ main {
 }
 
 .container {
+    display: flex;
     max-width: 1360px;
     margin: 0 auto;
     padding: 25px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-right: 20px;
 }
