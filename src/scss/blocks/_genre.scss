@@ -9,5 +9,15 @@
         grid-template-columns: repeat(auto-fill, 190px);
         gap: 55px 30px;
         margin-top: 30px;
+
+        @media screen and (max-width: $xl) {
+            grid-template-columns: repeat(auto-fill, 145px);
+            gap: 55px 25px;
+        }
+
+        @media screen and (max-width: $sm) {
+            grid-template-columns: repeat(auto-fill, 125px);
+            gap: 35px 20px;
+        }
     }
 }

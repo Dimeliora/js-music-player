@@ -18,13 +18,31 @@
         }
     }
 
+    @media screen and (max-width: $lg) {
+        position: fixed;
+        top: 0;
+        right: -100vw;
+        width: 100%;
+        margin: 0;
+        flex-basis: auto;
+        transition: right 0.2s linear;
+
+        &--active {
+            right: 0;
+        }
+    }
+
     &__wrapper {
         visibility: hidden;
+
+        @media screen and (max-width: $lg) {
+            visibility: visible;
+        }
     }
 
     &__hide {
         position: absolute;
-        top: 30px;
+        top: 20px;
         right: 20px;
         z-index: 100;
         display: flex;
@@ -34,12 +52,19 @@
         background-color: transparent;
         visibility: hidden;
         cursor: pointer;
+        @include round-highlight($yellow-transparent);
+
+        @media screen and (max-width: $lg) {
+            visibility: visible;
+        }
     }
 
     &__hide-icon {
+        position: relative;
+        z-index: 10;
         width: 20px;
         height: 20px;
-        fill: $yellow;
+        fill: #ffffff;
     }
 
     &__background {
@@ -62,6 +87,7 @@
     }
 
     &__cover-thumbnail {
+        flex-shrink: 0;
         width: 64px;
         height: 64px;
         margin-right: 15px;
@@ -81,11 +107,19 @@
         color: #ffffff;
         font-size: 2.2rem;
         font-weight: 500;
+
+        @media screen and (max-width: $sm) {
+            font-size: 1.8rem;
+        }
     }
 
     &__album-artist {
         color: $white-transparent;
         font-size: 1.6rem;
+
+        @media screen and (max-width: $sm) {
+            font-size: 1.4rem;
+        }
     }
 
     &__album-genre {

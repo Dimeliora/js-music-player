@@ -1,6 +1,6 @@
 .song {
     display: grid;
-    grid-template-columns: 25px 1fr 110px 30px;
+    grid-template-columns: 16px 1fr 110px 35px;
     column-gap: 5px;
     align-items: center;
     padding: 10px 8px;
@@ -56,6 +56,11 @@
         }
     }
 
+    @media screen and (max-width: $lg) {
+        grid-template-columns: 16px 2fr 1fr 35px;
+        column-gap: 15px;
+    }
+
     &__controls {
         justify-self: center;
     }
@@ -80,11 +85,6 @@
         &--pause {
             display: none;
         }
-
-        &:hover,
-        &:focus {
-            transform: scale(1.1);
-        }
     }
 
     &__icon {
@@ -100,19 +100,19 @@
         fill: $yellow;
 
         path:nth-child(1) {
-            animation: foobar 0.3s linear infinite alternate-reverse;
+            animation: shiftY 0.3s linear infinite alternate-reverse;
         }
 
         path:nth-child(2) {
-            animation: foobar 0.5s linear infinite alternate-reverse;
+            animation: shiftY 0.5s linear infinite alternate-reverse;
         }
 
         path:nth-child(3) {
-            animation: foobar 0.4s linear infinite alternate-reverse;
+            animation: shiftY 0.4s linear infinite alternate-reverse;
         }
 
         path:nth-child(4) {
-            animation: foobar 0.6s linear infinite alternate-reverse;
+            animation: shiftY 0.6s linear infinite alternate-reverse;
         }
     }
 
@@ -122,6 +122,10 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        @media screen and (max-width: $sm) {
+            font-size: 1.4rem;
+        }
     }
 
     &__artist {
@@ -129,6 +133,10 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
+        @media screen and (max-width: $sm) {
+            font-size: 1.2rem;
+        }
     }
 
     &__duration {
@@ -137,7 +145,7 @@
     }
 }
 
-@keyframes foobar {
+@keyframes shiftY {
     from {
         transform: translateY(80%);
     }

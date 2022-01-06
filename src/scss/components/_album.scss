@@ -23,6 +23,14 @@
         height: 190px;
         border-radius: 12px;
         overflow: hidden;
+
+        @media screen and (max-width: $xl) {
+            height: 145px;
+        }
+
+        @media screen and (max-width: $sm) {
+            height: 125px;
+        }
     }
 
     &__cover-image {

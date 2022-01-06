@@ -1,8 +1,9 @@
-@import "../../node_modules/normalize.css/normalize";
+@import '../../node_modules/normalize.css/normalize';
 
-@import "./fonts";
-@import "./colors";
-@import "./breakpoints";
-@import "./base";
-@import "./components/index";
-@import "./blocks/index";
+@import './fonts';
+@import './colors';
+@import './breakpoints';
+@import './base';
+@import './mixins/index';
+@import './components/index';
+@import './blocks/index';
