@@ -6,25 +6,20 @@
     margin: -25px -25px -25px 0;
     padding: 25px 0;
     overflow: hidden;
-    transition: flex-basis 0.25s linear;
+    transition: flex-basis 0.2s linear;
 
     &--active {
-        flex-basis: 430px;
+        flex-basis: 450px;
 
-        .player__hide {
-            visibility: visible;
-            transition: visibility 0.1s linear 0.2s;
-        }
-
+        .player__hide,
         .player__wrapper {
-            opacity: 1;
-            transition: opacity 0.3s ease-in 0.2s;
+            visibility: visible;
+            transition: visibility 0.1s ease-in 0.3s;
         }
     }
 
     &__wrapper {
-        opacity: 0;
-        transition: opacity 0.2s ease-in;
+        visibility: hidden;
     }
 
     &__hide {
