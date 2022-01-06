@@ -9,8 +9,7 @@
     cursor: default;
 
     &:hover,
-    &:focus,
-    &:focus-within {
+    &:focus {
         background-color: #fff;
         color: $gray-light;
 
@@ -42,8 +41,7 @@
         }
 
         &:hover,
-        &:focus,
-        &:focus-within {
+        &:focus {
             .song__playing {
                 display: none;
             }
@@ -100,6 +98,22 @@
         width: 16px;
         height: 16px;
         fill: $yellow;
+
+        path:nth-child(1) {
+            animation: foobar 0.25s linear infinite alternate-reverse;
+        }
+
+        path:nth-child(2) {
+            animation: foobar 0.35s linear infinite alternate-reverse;
+        }
+
+        path:nth-child(3) {
+            animation: foobar 0.7s linear infinite alternate-reverse;
+        }
+
+        path:nth-child(4) {
+            animation: foobar 0.6s linear infinite alternate-reverse;
+        }
     }
 
     &__title {
@@ -120,5 +134,15 @@
     &__duration {
         justify-self: end;
         font-size: 1.2rem;
+    }
+}
+
+@keyframes foobar {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(90%);
     }
 }
