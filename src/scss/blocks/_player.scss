@@ -1,11 +1,51 @@
 .player {
     --bg-image: '';
     position: relative;
-    flex-basis: 430px;
+    flex-basis: 0;
     min-height: 100vh;
     margin: -25px -25px -25px 0;
     padding: 25px 0;
     overflow: hidden;
+    transition: flex-basis 0.25s linear;
+
+    &--active {
+        flex-basis: 430px;
+
+        .player__hide {
+            visibility: visible;
+            transition: visibility 0.1s linear 0.2s;
+        }
+
+        .player__wrapper {
+            opacity: 1;
+            transition: opacity 0.3s ease-in 0.2s;
+        }
+    }
+
+    &__wrapper {
+        opacity: 0;
+        transition: opacity 0.2s ease-in;
+    }
+
+    &__hide {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background-color: transparent;
+        visibility: hidden;
+        cursor: pointer;
+    }
+
+    &__hide-icon {
+        width: 20px;
+        height: 20px;
+        fill: $yellow;
+    }
 
     &__background {
         position: absolute;

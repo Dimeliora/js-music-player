@@ -3,7 +3,7 @@
     cursor: pointer;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         .album__active-highlight {
             visibility: visible;
             opacity: 1;
@@ -14,7 +14,8 @@
         }
     }
 
-    &:focus {
+    &:focus,
+    &:focus-visible {
         outline: none;
     }
 
