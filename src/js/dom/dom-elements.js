@@ -7,4 +7,8 @@ export const albumsElms = {
 export const playerElms = {
     playerBlockElm: document.querySelector('[data-player-block]'),
     playerHideElm: document.querySelector('[data-player-hide]'),
+    playerThumbnailElm: document.querySelector('[data-player-thumbnail]'),
+    playerTitleElm: document.querySelector('[data-player-title]'),
+    playerArtistElm: document.querySelector('[data-player-artist]'),
+    playerGenreElm: document.querySelector('[data-player-genre]'),
 };
