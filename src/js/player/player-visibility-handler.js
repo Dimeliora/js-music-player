@@ -1,13 +1,17 @@
-import { albumsElms, playerElms } from './dom-elements';
+import { albumsElms, playerElms } from '../dom/dom-elements';
+import { state } from '../state/state';
 
 albumsElms.albumsGridElm.addEventListener('click', (e) => {
-    const album = e.target.closest('[data-album-item]');
+    const albumElm = e.target.closest('[data-album-id]');
 
-    if (!album) {
+    if (!albumElm) {
         return;
     }
 
-    const albumCoverSrc = `url(${album.dataset.albumItem})`;
+    const albumId = albumElm.dataset.albumId;
+    const { cover } = state.albums.find(({ id }) => id === albumId);
+
+    const albumCoverSrc = `url(${cover})`;
     playerElms.playerBlockElm.style.setProperty('--bg-image', albumCoverSrc);
 
     playerElms.playerBlockElm.classList.add('player--active');

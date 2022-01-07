@@ -1,1 +1,2 @@
-import './player-visibility-handler';
+import './albums/albums-handler';
+import './player/player-visibility-handler';
