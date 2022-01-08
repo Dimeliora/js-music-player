@@ -3,31 +3,6 @@ import { playerElms } from '../dom/dom-elements';
 import { createTrackHTML } from '../dom/template-creators';
 import { getFormattedDuration } from '../helpers/duration-formatter';
 
-// Track title moving speed (if cutted) in px/sec
-const TITLE_SHIFT_SPEED = 15;
-const MIN_TITLE_SHIFT_SPEED = 7;
-
-const getHiddenTitleWidth = (trackElm) => {
-    const titleElm = trackElm.querySelector('[data-track-title]');
-    const titleWrapperElm = trackElm.querySelector(
-        '[data-track-title-wrapper]'
-    );
-
-    const titleElmWidth = parseInt(getComputedStyle(titleElm).width);
-    const titleWrapperWidth = parseInt(getComputedStyle(titleWrapperElm).width);
-
-    return Math.max(0, titleWrapperWidth - titleElmWidth);
-};
-
-const setStyleForTitleShiftAnimation = (titleShiftPos, trackElm) => {
-    let titleShiftTime = titleShiftPos / TITLE_SHIFT_SPEED;
-    titleShiftTime = Math.max(titleShiftTime, MIN_TITLE_SHIFT_SPEED);
-    const titleFullShiftTime = titleShiftTime + 2 * (titleShiftTime / 3);
-
-    trackElm.style.setProperty('--title-shift-pos', `${-titleShiftPos}px`);
-    trackElm.style.setProperty('--title-shift-time', `${titleFullShiftTime}s`);
-};
-
 export const updatePlayerAfterAlbumSelection = () => {
     const album = state.selectedAlbum;
 
@@ -66,21 +41,14 @@ export const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
 };
 
-export const updatePlayerAfterTrackSelection = (trackElm) => {
+export const updatePlayerAfterTrackSelection = () => {
     [...playerElms.playerTracklistElm.children].forEach((child) => {
         child.classList.remove('track--playing');
-        child.removeAttribute('style');
     });
 
     playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
         state.selectedTrack.duration
     );
-
-    const titleShiftPos = getHiddenTitleWidth(trackElm);
-
-    if (titleShiftPos > 0) {
-        setStyleForTitleShiftAnimation(titleShiftPos, trackElm);
-    }
 };
 
 export const currentTimeUpdateHandler = () => {

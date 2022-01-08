@@ -28,7 +28,7 @@ const trackSelectHandler = (e) => {
                 state.selectedTrack.id
             );
 
-            updatePlayerAfterTrackSelection(trackElm);
+            updatePlayerAfterTrackSelection();
         }
 
         trackElm.classList.add('track--playing');
