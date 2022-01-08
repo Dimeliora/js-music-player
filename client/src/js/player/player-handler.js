@@ -65,6 +65,7 @@ ee.on('albums/album-selected', () => {
                 ...track,
                 artist: album.artist,
                 index: idx + 1,
+                isPlaying: track.id === state.selectedTrack?.id,
             })
         )
         .join(' ');

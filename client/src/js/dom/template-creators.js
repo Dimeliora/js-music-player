@@ -34,11 +34,13 @@ export const createAlbumHTML = (albumData) => {
 
 // Track Item HTML Template
 export const createTrackHTML = (trackData) => {
-    const { id, index, title, artist, duration } = trackData;
+    const { id, index, title, artist, duration, isPlaying } = trackData;
+
+    const activeClass = isPlaying ? 'track--playing' : '';
 
     return `
         <li
-            class="player__music-list-item track"
+            class="player__music-list-item track ${activeClass}"
             tabindex="0"
             data-track-id="${id}"
         >
