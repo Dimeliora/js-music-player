@@ -1,7 +1,9 @@
 .track {
+    --title-shift-pos: 0;
+    --title-shift-time: 0;
     display: grid;
     grid-template-columns: 16px 1fr 110px 35px;
-    column-gap: 5px;
+    column-gap: 8px;
     align-items: center;
     padding: 10px 8px;
     border-radius: 6px;
@@ -26,7 +28,7 @@
         }
     }
 
-    &:focus,
+    &:focus-visible,
     &:focus-within {
         outline: none;
     }
@@ -38,6 +40,11 @@
 
         .track__playing {
             display: block;
+        }
+
+        .track__title-wrapper {
+            white-space: nowrap;
+            animation: moveLeft var(--title-shift-time) linear infinite;
         }
 
         &:hover,
@@ -117,15 +124,18 @@
     }
 
     &__title {
+        overflow: hidden;
         color: #ffffff;
         font-size: 1.6rem;
-        overflow: hidden;
         white-space: nowrap;
-        text-overflow: ellipsis;
 
         @media screen and (max-width: $sm) {
             font-size: 1.4rem;
         }
+    }
+
+    &__title-wrapper {
+        display: inline-block;
     }
 
     &__artist {
@@ -152,5 +162,23 @@
 
     to {
         transform: translateY(0);
+    }
+}
+
+@keyframes moveLeft {
+    0% {
+        transform: translateX(0);
+    }
+
+    30% {
+        transform: translateX(0);
+    }
+
+    70% {
+        transform: translateX(var(--title-shift-pos));
+    }
+
+    100% {
+        transform: translateX(var(--title-shift-pos));
     }
 }

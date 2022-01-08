@@ -1,13 +1,13 @@
 import { ee } from '../helpers/event-emitter';
 import { state } from '../state/state';
 import { playerElms } from '../dom/dom-elements';
-import { createTrackHTML } from '../dom/template-creators';
 import { getTrackFile } from '../service/fetch-data';
-import { getFormattedDuration } from '../helpers/duration-formatter';
-
-const hidePlayerHandler = () => {
-    playerElms.playerBlockElm.classList.remove('player--active');
-};
+import {
+    updatePlayerAfterAlbumSelection,
+    hidePlayerHandler,
+    updatePlayerAfterTrackSelection,
+    currentTimeUpdateHandler,
+} from './player-view-updates';
 
 const trackSelectHandler = (e) => {
     const trackElm = e.target.closest('[data-track-id]');
@@ -23,18 +23,12 @@ const trackSelectHandler = (e) => {
                 ({ id }) => id === trackId
             );
 
-            [...playerElms.playerTracklistElm.children].forEach((child) => {
-                child.classList.remove('track--playing');
-            });
-
-            playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
-                state.selectedTrack.duration
-            );
-
             playerElms.playerAudioElm.src = getTrackFile(
                 state.selectedAlbum.id,
                 state.selectedTrack.id
             );
+
+            updatePlayerAfterTrackSelection(trackElm);
         }
 
         trackElm.classList.add('track--playing');
@@ -51,45 +45,7 @@ const trackSelectHandler = (e) => {
     }
 };
 
-const currentTimeUpdateHandler = () => {
-    const current = playerElms.playerAudioElm.currentTime;
-
-    playerElms.playerCurrentTimeElm.textContent = getFormattedDuration(current);
-};
-
-ee.on('albums/album-selected', () => {
-    const album = state.selectedAlbum;
-
-    const albumCoverSrc = `url(${album.cover})`;
-    playerElms.playerBlockElm.style.setProperty('--bg-image', albumCoverSrc);
-
-    playerElms.playerThumbnailElm.src = album.cover;
-    playerElms.playerThumbnailElm.alt = `${album.title} album cover`;
-
-    playerElms.playerTitleElm.textContent = album.title;
-    playerElms.playerArtistElm.textContent = album.artist;
-    playerElms.playerGenreElm.textContent = album.genre;
-
-    let currentPlayingTrackId;
-    if (state.selectedTrack && !playerElms.playerAudioElm.paused) {
-        currentPlayingTrackId = state.selectedTrack.id;
-    }
-
-    const tracklistMarkup = album.tracklist
-        .map((track, idx) =>
-            createTrackHTML({
-                ...track,
-                artist: album.artist,
-                index: idx + 1,
-                isPlaying: track.id === currentPlayingTrackId,
-            })
-        )
-        .join(' ');
-
-    playerElms.playerTracklistElm.innerHTML = tracklistMarkup;
-
-    playerElms.playerBlockElm.classList.add('player--active');
-});
+ee.on('albums/album-selected', updatePlayerAfterAlbumSelection);
 
 playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
 

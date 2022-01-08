@@ -88,7 +88,14 @@ export const createTrackHTML = (trackData) => {
                     />
                 </svg>
             </div>
-            <div class="track__title">${title}</div>
+            <div class="track__title" data-track-title>
+                <span
+                    class="track__title-wrapper"
+                    data-track-title-wrapper
+                >
+                    ${title}
+                </span>
+            </div>
             <div class="track__artist">${artist}</div>
             <div class="track__duration">${getFormattedDuration(duration)}</div>
         </li>
