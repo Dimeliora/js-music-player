@@ -11,4 +11,5 @@ export const playerElms = {
     playerTitleElm: document.querySelector('[data-player-title]'),
     playerArtistElm: document.querySelector('[data-player-artist]'),
     playerGenreElm: document.querySelector('[data-player-genre]'),
+    playerTracklistElm: document.querySelector('[data-player-tracklist]'),
 };

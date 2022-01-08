@@ -1,4 +1,4 @@
-.song {
+.track {
     display: grid;
     grid-template-columns: 16px 1fr 110px 35px;
     column-gap: 5px;
@@ -13,15 +13,15 @@
         background-color: #fff;
         color: $gray-light;
 
-        .song__title {
+        .track__title {
             color: $gray;
         }
 
-        .song__index {
+        .track__index {
             display: none;
         }
 
-        .song__button--play {
+        .track__button--play {
             display: flex;
         }
     }
@@ -32,25 +32,25 @@
     }
 
     &--playing {
-        .song__index {
+        .track__index {
             display: none;
         }
 
-        .song__playing {
+        .track__playing {
             display: block;
         }
 
         &:hover,
         &:focus {
-            .song__playing {
+            .track__playing {
                 display: none;
             }
 
-            .song__button--play {
+            .track__button--play {
                 display: none;
             }
 
-            .song__button--pause {
+            .track__button--pause {
                 display: flex;
             }
         }
