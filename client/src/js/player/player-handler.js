@@ -59,13 +59,18 @@ ee.on('albums/album-selected', () => {
     playerElms.playerArtistElm.textContent = album.artist;
     playerElms.playerGenreElm.textContent = album.genre;
 
+    let currentPlayingTrackId;
+    if (state.selectedTrack && !playerElms.playerAudioElm.paused) {
+        currentPlayingTrackId = state.selectedTrack.id;
+    }
+
     const tracklistMarkup = album.tracklist
         .map((track, idx) =>
             createTrackHTML({
                 ...track,
                 artist: album.artist,
                 index: idx + 1,
-                isPlaying: track.id === state.selectedTrack?.id,
+                isPlaying: track.id === currentPlayingTrackId,
             })
         )
         .join(' ');
