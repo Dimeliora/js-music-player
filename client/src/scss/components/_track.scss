@@ -9,7 +9,7 @@
     cursor: default;
 
     &:hover,
-    &:focus {
+    &:focus-visible {
         background-color: #fff;
         color: $gray-light;
 
@@ -41,7 +41,7 @@
         }
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             .track__playing {
                 display: none;
             }

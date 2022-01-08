@@ -1,24 +1,28 @@
+import { getFormattedDuration } from '../helpers/duration-formatter';
+
 // Album Item HTML Template
 export const createAlbumHTML = (albumData) => {
+    const { id, cover, title, artist } = albumData;
+
     return `
         <div
             class="genre__albums-item album"
             tabindex="0"
-            data-album-id="${albumData.id}"
+            data-album-id="${id}"
         >
             <div class="album__cover">
                 <img
-                    src="${albumData.cover}"
-                    alt="${albumData.title} album cover"
+                    src="${cover}"
+                    alt="${title} album cover"
                     class="album__cover-image"
                 />
             </div>
-            <h3 class="album__title">${albumData.title}</h3>
+            <h3 class="album__title">${title}</h3>
             <div class="album__artist">
-                ${albumData.artist}
+                ${artist}
             </div>
             <img
-                src="${albumData.cover}"
+                src="${cover}"
                 alt="Album cover backdrop"
                 class="album__active-highlight"
                 aria-hidden="true"
@@ -30,14 +34,16 @@ export const createAlbumHTML = (albumData) => {
 
 // Track Item HTML Template
 export const createTrackHTML = (trackData) => {
+    const { id, index, title, artist, duration } = trackData;
+
     return `
         <li
             class="player__music-list-item track"
             tabindex="0"
-            data-track-id="${trackData.id}"
+            data-track-id="${id}"
         >
             <div class="track__controls">
-                <span class="track__index">${trackData.index}</span>
+                <span class="track__index">${index}</span>
                 <button
                     class="track__button track__button--play"
                     tabindex="-1"
@@ -80,9 +86,9 @@ export const createTrackHTML = (trackData) => {
                     />
                 </svg>
             </div>
-            <div class="track__title">${trackData.title}</div>
-            <div class="track__artist">${trackData.artist}</div>
-            <div class="track__duration">${trackData.duration}</div>
+            <div class="track__title">${title}</div>
+            <div class="track__artist">${artist}</div>
+            <div class="track__duration">${getFormattedDuration(duration)}</div>
         </li>
     `;
 };

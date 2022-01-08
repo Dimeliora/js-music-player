@@ -7,7 +7,34 @@ const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
 };
 
-const trackSelectHandler = (e) => {};
+const trackSelectHandler = (e) => {
+    const trackElm = e.target.closest('[data-track-id]');
+    if (!trackElm) {
+        return;
+    }
+
+    const trackId = trackElm.dataset.trackId;
+
+    if (e.target.closest('[data-track-play]')) {
+        if (state.selectedTrack?.id !== trackId) {
+            state.selectedTrack = state.selectedAlbum.tracklist.find(
+                ({ id }) => id === trackId
+            );
+
+            [...playerElms.playerTracklistElm.children].forEach((child) => {
+                child.classList.remove('track--playing');
+            });
+        }
+
+        trackElm.classList.add('track--playing');
+        return;
+    }
+
+    if (e.target.closest('[data-track-pause]')) {
+        trackElm.classList.remove('track--playing');
+        return;
+    }
+};
 
 ee.on('albums/album-selected', () => {
     const album = state.selectedAlbum;

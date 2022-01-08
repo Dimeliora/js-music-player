@@ -15,3 +15,7 @@ export const getAlbumsCoverImages = async (albumsData) => {
 
     return Promise.all(requests);
 };
+
+export const getTrackFile = (albumId, trackId) => {
+    return `${BASE_URL}/albums/${albumId}/${trackId}`;
+};
