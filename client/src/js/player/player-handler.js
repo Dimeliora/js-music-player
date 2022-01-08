@@ -1,7 +1,8 @@
 import { ee } from '../helpers/event-emitter';
+import { state } from '../state/state';
 import { playerElms } from '../dom/dom-elements';
 import { createTrackHTML } from '../dom/template-creators';
-import { state } from '../state/state';
+import { getTrackFile } from '../service/fetch-data';
 
 const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
@@ -24,14 +25,23 @@ const trackSelectHandler = (e) => {
             [...playerElms.playerTracklistElm.children].forEach((child) => {
                 child.classList.remove('track--playing');
             });
+
+            playerElms.playerAudioElm.src = getTrackFile(
+                state.selectedAlbum.id,
+                state.selectedTrack.id
+            );
         }
 
         trackElm.classList.add('track--playing');
+
+        playerElms.playerAudioElm.play();
         return;
     }
 
     if (e.target.closest('[data-track-pause]')) {
         trackElm.classList.remove('track--playing');
+
+        playerElms.playerAudioElm.pause();
         return;
     }
 };
