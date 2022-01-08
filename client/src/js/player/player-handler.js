@@ -3,6 +3,7 @@ import { state } from '../state/state';
 import { playerElms } from '../dom/dom-elements';
 import { createTrackHTML } from '../dom/template-creators';
 import { getTrackFile } from '../service/fetch-data';
+import { getFormattedDuration } from '../helpers/duration-formatter';
 
 const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
@@ -26,6 +27,10 @@ const trackSelectHandler = (e) => {
                 child.classList.remove('track--playing');
             });
 
+            playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
+                state.selectedTrack.duration
+            );
+
             playerElms.playerAudioElm.src = getTrackFile(
                 state.selectedAlbum.id,
                 state.selectedTrack.id
@@ -44,6 +49,12 @@ const trackSelectHandler = (e) => {
         playerElms.playerAudioElm.pause();
         return;
     }
+};
+
+const currentTimeUpdateHandler = () => {
+    const current = playerElms.playerAudioElm.currentTime;
+
+    playerElms.playerCurrentTimeElm.textContent = getFormattedDuration(current);
 };
 
 ee.on('albums/album-selected', () => {
@@ -83,3 +94,8 @@ ee.on('albums/album-selected', () => {
 playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
 
 playerElms.playerTracklistElm.addEventListener('click', trackSelectHandler);
+
+playerElms.playerAudioElm.addEventListener(
+    'timeupdate',
+    currentTimeUpdateHandler
+);
