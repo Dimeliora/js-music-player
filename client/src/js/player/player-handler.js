@@ -17,31 +17,26 @@ const trackSelectHandler = (e) => {
 
     const trackId = trackElm.dataset.trackId;
 
-    if (e.target.closest('[data-track-play]')) {
-        if (state.selectedTrack?.id !== trackId) {
-            state.selectedTrack = state.selectedAlbum.tracklist.find(
-                ({ id }) => id === trackId
-            );
-
-            playerElms.playerAudioElm.src = getTrackFile(
-                state.selectedAlbum.id,
-                state.selectedTrack.id
-            );
-
-            updatePlayerAfterTrackSelection();
-        }
-
-        trackElm.classList.add('track--playing');
-
-        playerElms.playerAudioElm.play();
-        return;
-    }
-
-    if (e.target.closest('[data-track-pause]')) {
-        trackElm.classList.remove('track--playing');
+    if (state.selectedTrack?.id !== trackId) {
+        state.selectedTrack = state.selectedAlbum.tracklist.find(
+            ({ id }) => id === trackId
+        );
 
         playerElms.playerAudioElm.pause();
-        return;
+        playerElms.playerAudioElm.src = getTrackFile(
+            state.selectedAlbum.id,
+            state.selectedTrack.id
+        );
+
+        updatePlayerAfterTrackSelection();
+    }
+
+    if (playerElms.playerAudioElm.paused) {
+        trackElm.classList.add('track--playing');
+        playerElms.playerAudioElm.play();
+    } else {
+        trackElm.classList.remove('track--playing');
+        playerElms.playerAudioElm.pause();
     }
 };
 

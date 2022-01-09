@@ -44,35 +44,17 @@ export const createTrackHTML = (trackData) => {
             tabindex="0"
             data-track-id="${id}"
         >
-            <div class="track__controls">
+            <div class="track__status">
                 <span class="track__index">${index}</span>
-                <button
-                    class="track__button track__button--play"
-                    tabindex="-1"
-                    title="Play"
-                    aria-label="Play"
-                    data-track-play
-                >
-                    <svg class="track__icon">
-                        <use
-                            href="/icons/icon-sprite.svg#play"
-                        />
-                    </svg>
-                </button>
-                <button
-                    class="track__button track__button--pause"
-                    tabindex="-1"
-                    title="Pause"
-                    aria-label="Pause"
-                    data-track-pause
-                >
-                    <svg class="track__icon">
-                        <use href="/icons/icon-sprite.svg#pause"/>
-                    </svg>
-                </button>
+                <svg class="track__icon track__icon--play">
+                    <use href="/icons/icon-sprite.svg#play"/>
+                </svg>                
+                <svg class="track__icon track__icon--pause">
+                    <use href="/icons/icon-sprite.svg#pause"/>
+                </svg>
                 <svg
                     viewBox="0 0 16 12"
-                    class="track__playing track__icon"
+                    class="track__icon track__icon--playing"
                 >
                     <path
                         d="M1 3C1 2.4 1.4 2 2 2V2C2.5 2 3 2.4 3 3V14H1V3Z"
