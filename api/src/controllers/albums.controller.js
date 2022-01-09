@@ -10,7 +10,16 @@ exports.getAlbumsData = (_, res) => {
             return;
         }
 
-        res.json(JSON.parse(data));
+        const albumsData = JSON.parse(data);
+        const rootAlbumsData = albumsData.map((album) => {
+            const filteredAlbumProps = Object.entries(album).filter(
+                ([key]) => key !== 'tracklist'
+            );
+
+            return Object.fromEntries(filteredAlbumProps);
+        });
+
+        res.json(rootAlbumsData);
     });
 };
 
@@ -18,6 +27,22 @@ exports.getAlbumsCoverImages = (req, res) => {
     const albumId = req.params.id;
 
     res.sendFile(getAlbumFile(albumId, 'cover.jpg'));
+};
+
+exports.getAlbumsTracklist = (req, res) => {
+    const albumId = req.params.id;
+
+    fs.readFile(ALBUMS_DATA_FILE, (err, data) => {
+        if (err) {
+            res.status(500).send({ message: 'Something went wrong!' });
+            return;
+        }
+
+        const albumsData = JSON.parse(data);
+        const album = albumsData.find((item) => item.id === albumId);
+
+        res.json(album.tracklist);
+    });
 };
 
 exports.getAlbumTrack = (req, res) => {
