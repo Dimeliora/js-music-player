@@ -7,7 +7,7 @@ const CANVAS_HEIGHT = 42;
 const POINT_WIDTH = 3;
 const POINT_MARGIN = 1;
 const POINT_FILL_COLOR = '#8a880d';
-const POINT_PLAYED_COLOR = '#e4e00f';
+const POINT_PLAYED_COLOR = '#ffcd06';
 const POINT_HOVER_COLOR = '#e6e481';
 const POINT_HOVER_PLAYED_COLOR = '#47460e';
 
