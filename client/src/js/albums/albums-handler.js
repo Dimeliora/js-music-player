@@ -1,19 +1,29 @@
 import { ee } from '../helpers/event-emitter';
-import { getAlbumsData, getAlbumsCoverImages } from '../service/fetch-data';
+import {
+    getAlbumsData,
+    getAlbumsCoverImages,
+    getAlbumTracklist,
+} from '../service/fetch-data';
 import { state } from '../state/state';
 import { albumsElms } from '../dom/dom-elements';
 import { createAlbumHTML } from '../dom/template-creators';
 
-const chooseAlbumHandler = (e) => {
+const chooseAlbumHandler = async (e) => {
     const albumElm = e.target.closest('[data-album-id]');
     if (!albumElm) {
         return;
     }
 
     const albumId = albumElm.dataset.albumId;
-    state.selectedAlbum = state.albums.find(({ id }) => id === albumId);
+    const album = state.albums.find(({ id }) => id === albumId);
+    if (album.tracklist === undefined) {
+        album.tracklist = await getAlbumTracklist(albumId);
+    }
 
-    ee.emit('albums/album-selected');
+    if (state.selectedAlbum !== album) {
+        state.selectedAlbum = album;
+        ee.emit('albums/album-selected');
+    }
 };
 
 const albumsHandler = async () => {
