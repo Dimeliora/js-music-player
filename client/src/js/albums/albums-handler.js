@@ -20,10 +20,8 @@ const chooseAlbumHandler = async (e) => {
         album.tracklist = await getAlbumTracklist(albumId);
     }
 
-    if (state.selectedAlbum !== album) {
-        state.selectedAlbum = album;
-        ee.emit('albums/album-selected');
-    }
+    state.selectedAlbum = album;
+    ee.emit('albums/album-selected');
 };
 
 const albumsHandler = async () => {

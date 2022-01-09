@@ -1,7 +1,6 @@
 import { ee } from '../helpers/event-emitter';
 import { state } from '../state/state';
 import { playerElms } from '../dom/dom-elements';
-import { getFormattedDuration } from '../helpers/duration-formatter';
 import { getTrackFile } from '../service/fetch-data';
 import {
     updatePlayerAfterAlbumSelection,
@@ -75,6 +74,28 @@ const playingTrackEndsHandler = () => {
     }
 };
 
+const rewindTrackProgress = (step) => {
+    playerElms.playerAudioElm.currentTime += step;
+};
+
+const trackKeyboardHandler = (e) => {
+    switch (e.key) {
+        case 'Enter':
+        case ' ':
+            trackClickHandler(e);
+            break;
+        case 'Escape':
+            hidePlayerHandler();
+            break;
+        case 'ArrowLeft':
+            rewindTrackProgress(-10);
+            break;
+        case 'ArrowRight':
+            rewindTrackProgress(10);
+            break;
+    }
+};
+
 ee.on('albums/album-selected', updatePlayerAfterAlbumSelection);
 
 playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
@@ -89,3 +110,5 @@ playerElms.playerAudioElm.addEventListener(
 ee.on('player/progress-click', progressClickHandler);
 
 playerElms.playerAudioElm.addEventListener('ended', playingTrackEndsHandler);
+
+playerElms.playerBlockElm.addEventListener('keyup', trackKeyboardHandler);
