@@ -51,7 +51,12 @@ playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
 
 playerElms.playerTracklistElm.addEventListener('click', trackSelectHandler);
 
-playerElms.playerAudioElm.addEventListener(
-    'timeupdate',
-    currentTimeUpdateHandler
-);
+playerElms.playerAudioElm.addEventListener('timeupdate', () => {
+    currentTimeUpdateHandler();
+
+    ee.emit('player/time-updated', playerElms.playerAudioElm.currentTime);
+});
+
+ee.on('player/progress-click', (newCurrentTime) => {
+    playerElms.playerAudioElm.currentTime = newCurrentTime;
+});

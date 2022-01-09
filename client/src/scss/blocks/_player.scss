@@ -131,12 +131,7 @@
     &__progress {
         margin-top: 30px;
         padding: 0 25px;
-    }
-
-    &__progress-placeholder {
-        img {
-            max-width: 100%;
-        }
+        cursor: pointer;
     }
 
     &__timestamps {

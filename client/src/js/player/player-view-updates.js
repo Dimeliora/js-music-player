@@ -2,6 +2,7 @@ import { state } from '../state/state';
 import { playerElms } from '../dom/dom-elements';
 import { createTrackHTML } from '../dom/template-creators';
 import { getFormattedDuration } from '../helpers/duration-formatter';
+import { renderWaveForm } from './player-waveform-handler';
 
 export const updatePlayerAfterAlbumSelection = () => {
     const album = state.selectedAlbum;
@@ -33,6 +34,8 @@ export const updatePlayerAfterAlbumSelection = () => {
         .join(' ');
 
     playerElms.playerTracklistElm.innerHTML = tracklistMarkup;
+
+    requestAnimationFrame(() => renderWaveForm());
 
     playerElms.playerBlockElm.classList.add('player--active');
 };
