@@ -6,6 +6,10 @@
         max-width: 100px;
         margin-right: auto;
 
+        &:focus-visible {
+            outline: 2px solid $gray;
+        }
+
         @media screen and (max-width: $sm) {
             max-width: 70px;
         }

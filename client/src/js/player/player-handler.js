@@ -21,6 +21,11 @@ const updateSelectedTrack = (trackId) => {
     );
 
     updatePlayerAfterTrackSelection();
+
+    if (state.playingAlbumId !== state.selectedAlbum.id) {
+        state.playingAlbumId = state.selectedAlbum.id;
+        ee.emit('player/track-selected', state.selectedAlbum.id);
+    }
 };
 
 const trackClickHandler = (e) => {

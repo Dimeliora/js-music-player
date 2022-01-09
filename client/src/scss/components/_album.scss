@@ -2,6 +2,7 @@
     position: relative;
     cursor: pointer;
 
+    &--active,
     &:hover,
     &:focus-visible {
         .album__active-highlight {

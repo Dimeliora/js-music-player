@@ -38,6 +38,7 @@ export const updatePlayerAfterAlbumSelection = () => {
     requestAnimationFrame(() => renderWaveForm());
 
     playerElms.playerBlockElm.classList.add('player--active');
+    playerElms.playerBlockElm.focus();
 };
 
 export const hidePlayerHandler = () => {

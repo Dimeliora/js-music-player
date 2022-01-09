@@ -8,6 +8,11 @@
     overflow: hidden;
     transition: flex-basis 0.2s linear;
 
+    &:focus,
+    &:focus-visible {
+        outline: none;
+    }
+
     &--active {
         flex-basis: 450px;
 
