@@ -3,7 +3,7 @@ const express = require('express');
 const { corsMW } = require('./middlewares/corsMW');
 const { albumsRouter } = require('./routes/albums.routes');
 
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
