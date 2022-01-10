@@ -6,10 +6,10 @@ const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 42;
 const POINT_WIDTH = 3;
 const POINT_MARGIN = 1;
-const POINT_FILL_COLOR = '#8a880d';
+const POINT_FILL_COLOR = '#5c4e16';
+const POINT_BUFFERED_COLOR = '#927916';
 const POINT_PLAYED_COLOR = '#ffcd06';
 const POINT_HOVER_COLOR = '#e6e481';
-const POINT_HOVER_PLAYED_COLOR = '#47460e';
 
 const canvas = playerElms.playerProgressElm;
 
@@ -19,6 +19,7 @@ const ctx = canvas.getContext('2d');
 
 let hoverXCoord;
 let playedPoint = 0;
+let bufferedPoint = 0;
 
 const getPointCoords = ({
     index,
@@ -37,7 +38,12 @@ const getPointCoords = ({
     ];
 };
 
-export const renderWaveForm = (waveformData, playedPoint = 0, hoverXCoord) => {
+export const renderWaveForm = (
+    waveformData,
+    playedPoint = 0,
+    hoverXCoord,
+    bufferedPoint
+) => {
     const data = waveformData ?? Array(100).fill(100);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -57,19 +63,48 @@ export const renderWaveForm = (waveformData, playedPoint = 0, hoverXCoord) => {
 
         const isPointHovered = hoverXCoord >= pointCoords[0];
         const isPointPlayed = index < playedPoint;
-        if (isPointHovered) {
-            ctx.fillStyle = isPointPlayed
-                ? POINT_HOVER_PLAYED_COLOR
-                : POINT_HOVER_COLOR;
-        } else if (isPointPlayed) {
+        const isPointBuffered = index < bufferedPoint;
+
+        if (isPointBuffered) {
+            ctx.fillStyle = POINT_BUFFERED_COLOR;
+        }
+        if (isPointPlayed) {
             ctx.fillStyle = POINT_PLAYED_COLOR;
-        } else {
+        }
+        if (isPointHovered) {
+            ctx.fillStyle = POINT_HOVER_COLOR;
+        }
+        if (!isPointBuffered && !isPointHovered) {
             ctx.fillStyle = POINT_FILL_COLOR;
         }
 
         ctx.fill();
     });
 };
+
+ee.on('player/audio-source-changed', () => {
+    bufferedPoint = 0;
+});
+
+ee.on('player/data-buffering', ({ bufferedTime }) => {
+    const { selectedTrack } = state;
+    if (!selectedTrack) {
+        return;
+    }
+
+    const trackBufferedTime = bufferedTime / selectedTrack.duration;
+    bufferedPoint =
+        (CANVAS_WIDTH * trackBufferedTime) / (POINT_WIDTH + POINT_MARGIN);
+
+    requestAnimationFrame(() =>
+        renderWaveForm(
+            selectedTrack.waveformData,
+            playedPoint,
+            hoverXCoord,
+            bufferedPoint
+        )
+    );
+});
 
 ee.on('player/time-updated', ({ currentTime }) => {
     const { selectedTrack } = state;
@@ -81,7 +116,12 @@ ee.on('player/time-updated', ({ currentTime }) => {
     playedPoint = (CANVAS_WIDTH * trackProgress) / (POINT_WIDTH + POINT_MARGIN);
 
     requestAnimationFrame(() =>
-        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+        renderWaveForm(
+            selectedTrack.waveformData,
+            playedPoint,
+            hoverXCoord,
+            bufferedPoint
+        )
     );
 });
 
@@ -93,7 +133,12 @@ canvas.addEventListener('mousemove', ({ layerX }) => {
 
     hoverXCoord = layerX;
     requestAnimationFrame(() =>
-        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+        renderWaveForm(
+            selectedTrack.waveformData,
+            playedPoint,
+            hoverXCoord,
+            bufferedPoint
+        )
     );
 });
 
@@ -105,7 +150,12 @@ canvas.addEventListener('mouseleave', () => {
 
     hoverXCoord = undefined;
     requestAnimationFrame(() =>
-        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+        renderWaveForm(
+            selectedTrack.waveformData,
+            playedPoint,
+            hoverXCoord,
+            bufferedPoint
+        )
     );
 });
 
