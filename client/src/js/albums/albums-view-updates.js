@@ -1,6 +1,6 @@
-import { albumsElms } from '../dom/dom-elements';
+import { albumsElms } from './albums-dom-elements';
 
-export const updateAlbumsActiveClass = (albumId) => {
+export const updateAlbumsActiveClass = ({ albumId }) => {
     [...albumsElms.albumsGridElm.children].forEach((child) => {
         if (child.dataset.albumId !== albumId) {
             child.classList.remove('album--active');

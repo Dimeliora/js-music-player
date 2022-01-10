@@ -1,12 +1,13 @@
-import { state } from '../state/state';
-import { playerElms } from '../dom/dom-elements';
-import { createTrackHTML } from '../dom/template-creators';
-import { getFormattedDuration } from '../helpers/duration-formatter';
+import { playerElms } from './player-dom-elements';
 import { renderWaveForm } from './player-waveform-handler';
+import { createTrackHTML } from './player-template-creators';
+import { getFormattedDuration } from '../helpers/duration-formatter';
 
-export const updatePlayerAfterAlbumSelection = () => {
-    const album = state.selectedAlbum;
-
+export const updatePlayerAfterAlbumSelection = ({
+    album,
+    selectedTrack,
+    playingAlbum,
+}) => {
     const albumCoverSrc = `url(${album.cover})`;
     playerElms.playerBlockElm.style.setProperty('--bg-image', albumCoverSrc);
 
@@ -18,8 +19,8 @@ export const updatePlayerAfterAlbumSelection = () => {
     playerElms.playerGenreElm.textContent = album.genre;
 
     let currentPlayingTrackId;
-    if (state.selectedTrack && !playerElms.playerAudioElm.paused) {
-        currentPlayingTrackId = state.selectedTrack.id;
+    if (selectedTrack && !playerElms.playerAudioElm.paused) {
+        currentPlayingTrackId = selectedTrack.id;
     }
 
     const tracklistMarkup = album.tracklist
@@ -35,23 +36,33 @@ export const updatePlayerAfterAlbumSelection = () => {
 
     playerElms.playerTracklistElm.innerHTML = tracklistMarkup;
 
-    requestAnimationFrame(() => renderWaveForm());
+    if (!playingAlbum) {
+        requestAnimationFrame(() => renderWaveForm());
+    }
 
-    playerElms.playerBlockElm.classList.add('player--active');
+    showPlayerHandler();
     playerElms.playerBlockElm.focus();
+};
+
+export const showPlayerHandler = () => {
+    playerElms.playerBlockElm.classList.add('player--active');
 };
 
 export const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
 };
 
-export const updatePlayerAfterTrackSelection = () => {
+export const updatePlayerViewAfterTrackSelection = (selectedTrack) => {
     [...playerElms.playerTracklistElm.children].forEach((child) => {
-        child.classList.remove('track--playing');
+        if (child.dataset.trackId !== selectedTrack.id) {
+            child.classList.remove('track--playing');
+        } else {
+            child.classList.add('track--playing');
+        }
     });
 
     playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
-        state.selectedTrack.duration
+        selectedTrack.duration
     );
 };
 

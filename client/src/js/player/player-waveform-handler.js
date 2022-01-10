@@ -1,6 +1,6 @@
-import { playerElms } from '../dom/dom-elements';
-import { state } from '../state/state';
 import { ee } from '../helpers/event-emitter';
+import { state } from '../state/state';
+import { playerElms } from './player-dom-elements';
 
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 42;
@@ -37,13 +37,12 @@ const getPointCoords = ({
     ];
 };
 
-export const renderWaveForm = (playedPoint = 0, hoverXCoord) => {
-    const { selectedTrack } = state;
-    let waveformData = selectedTrack?.waveformData ?? Array(100).fill(100);
+export const renderWaveForm = (waveformData, playedPoint = 0, hoverXCoord) => {
+    const data = waveformData ?? Array(100).fill(100);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    waveformData.forEach((point, index) => {
+    data.forEach((point, index) => {
         ctx.beginPath();
 
         const pointCoords = getPointCoords({
@@ -72,30 +71,51 @@ export const renderWaveForm = (playedPoint = 0, hoverXCoord) => {
     });
 };
 
-ee.on('player/time-updated', (currentTime) => {
+ee.on('player/time-updated', ({ currentTime }) => {
     const { selectedTrack } = state;
+    if (!selectedTrack) {
+        return;
+    }
 
     const trackProgress = currentTime / selectedTrack.duration;
     playedPoint = (CANVAS_WIDTH * trackProgress) / (POINT_WIDTH + POINT_MARGIN);
 
-    requestAnimationFrame(() => renderWaveForm(playedPoint, hoverXCoord));
+    requestAnimationFrame(() =>
+        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+    );
 });
 
 canvas.addEventListener('mousemove', ({ layerX }) => {
+    const { selectedTrack } = state;
+    if (!selectedTrack) {
+        return;
+    }
+
     hoverXCoord = layerX;
-    requestAnimationFrame(() => renderWaveForm(playedPoint, hoverXCoord));
+    requestAnimationFrame(() =>
+        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+    );
 });
 
 canvas.addEventListener('mouseleave', () => {
+    const { selectedTrack } = state;
+    if (!selectedTrack) {
+        return;
+    }
+
     hoverXCoord = undefined;
-    requestAnimationFrame(() => renderWaveForm(playedPoint, hoverXCoord));
+    requestAnimationFrame(() =>
+        renderWaveForm(selectedTrack.waveformData, playedPoint, hoverXCoord)
+    );
 });
 
 canvas.addEventListener('click', ({ layerX }) => {
     const { selectedTrack } = state;
+    if (!selectedTrack) {
+        return;
+    }
 
-    ee.emit(
-        'player/progress-click',
-        (selectedTrack.duration * layerX) / CANVAS_WIDTH
-    );
+    ee.emit('progress/time-update', {
+        newCurrentTime: (selectedTrack.duration * layerX) / CANVAS_WIDTH,
+    });
 });

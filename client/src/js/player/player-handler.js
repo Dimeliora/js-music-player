@@ -1,31 +1,24 @@
 import { ee } from '../helpers/event-emitter';
 import { state } from '../state/state';
-import { playerElms } from '../dom/dom-elements';
+import { playerElms } from './player-dom-elements';
 import { getTrackFile } from '../service/fetch-data';
 import {
-    updatePlayerAfterAlbumSelection,
+    showPlayerHandler,
     hidePlayerHandler,
-    updatePlayerAfterTrackSelection,
     currentTimeUpdateHandler,
+    updatePlayerAfterAlbumSelection,
+    updatePlayerViewAfterTrackSelection,
 } from './player-view-updates';
 
-const updateSelectedTrack = (trackId) => {
-    state.selectedTrack = state.selectedAlbum.tracklist.find(
-        ({ id }) => id === trackId
-    );
+const updateSelectedTrackAndPlayer = (album, trackId) => {
+    state.selectedTrack = album.tracklist.find(({ id }) => id === trackId);
 
-    playerElms.playerAudioElm.pause();
-    playerElms.playerAudioElm.src = getTrackFile(
-        state.selectedAlbum.id,
-        state.selectedTrack.id
-    );
+    updatePlayerViewAfterTrackSelection(state.selectedTrack);
 
-    updatePlayerAfterTrackSelection();
+    playerElms.playerAudioElm.src = getTrackFile(album.id, trackId);
 
-    if (state.playingAlbumId !== state.selectedAlbum.id) {
-        state.playingAlbumId = state.selectedAlbum.id;
-        ee.emit('player/track-selected', state.selectedAlbum.id);
-    }
+    state.playingAlbum = album;
+    ee.emit('player/track-selected', { albumId: state.playingAlbum.id });
 };
 
 const trackClickHandler = (e) => {
@@ -36,7 +29,7 @@ const trackClickHandler = (e) => {
 
     const trackId = trackElm.dataset.trackId;
     if (state.selectedTrack?.id !== trackId) {
-        updateSelectedTrack(trackId);
+        updateSelectedTrackAndPlayer(state.selectedAlbum, trackId);
     }
 
     if (playerElms.playerAudioElm.paused) {
@@ -50,32 +43,33 @@ const trackClickHandler = (e) => {
 
 const playerOnTimeUpdatedHandler = () => {
     currentTimeUpdateHandler();
-    ee.emit('player/time-updated', playerElms.playerAudioElm.currentTime);
+    ee.emit('player/time-updated', {
+        currentTime: playerElms.playerAudioElm.currentTime,
+    });
 };
 
-const progressClickHandler = (newCurrentTime) => {
+const progressTimeUpdateHandler = ({ newCurrentTime }) => {
     playerElms.playerAudioElm.currentTime = newCurrentTime;
 };
 
 const playingTrackEndsHandler = () => {
-    const trackElm = playerElms.playerTracklistElm.querySelector(
-        `[data-track-id="${state.selectedTrack.id}"]`
-    );
-    const trackIndex = state.selectedAlbum.tracklist.findIndex(
+    const trackIndex = state.playingAlbum.tracklist.findIndex(
         (track) => track.id === state.selectedTrack.id
     );
+    const nextTrack = state.playingAlbum.tracklist[trackIndex + 1];
 
-    const nextTrack = state.selectedAlbum.tracklist[trackIndex + 1];
-    if (nextTrack !== undefined) {
-        const nextTrackElm = trackElm.nextElementSibling;
-
-        updateSelectedTrack(nextTrackElm.dataset.trackId);
-
-        nextTrackElm.classList.add('track--playing');
+    if (nextTrack) {
+        updateSelectedTrackAndPlayer(state.playingAlbum, nextTrack.id);
         playerElms.playerAudioElm.play();
     } else {
+        const trackElm = playerElms.playerTracklistElm.querySelector(
+            `[data-track-id="${state.selectedTrack.id}"]`
+        );
+        if (trackElm) {
+            trackElm.classList.remove('track--playing');
+        }
+
         playerElms.playerAudioElm.currentTime = 0;
-        trackElm.classList.remove('track--playing');
     }
 };
 
@@ -103,6 +97,12 @@ const trackKeyboardHandler = (e) => {
 
 ee.on('albums/album-selected', updatePlayerAfterAlbumSelection);
 
+ee.on('albums/show-player', showPlayerHandler);
+
+ee.on('progress/time-update', progressTimeUpdateHandler);
+
+playerElms.playerBlockElm.addEventListener('keyup', trackKeyboardHandler);
+
 playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
 
 playerElms.playerTracklistElm.addEventListener('click', trackClickHandler);
@@ -112,8 +112,4 @@ playerElms.playerAudioElm.addEventListener(
     playerOnTimeUpdatedHandler
 );
 
-ee.on('player/progress-click', progressClickHandler);
-
 playerElms.playerAudioElm.addEventListener('ended', playingTrackEndsHandler);
-
-playerElms.playerBlockElm.addEventListener('keyup', trackKeyboardHandler);
