@@ -1,3 +1,15 @@
+// Genre block HTML Template
+export const createGenreBlockHTML = (genre) => {
+    return `
+        <div class="genres__item" data-albums-genre="${genre}">
+            <h2 class="genres__heading" data-albums-genre-title>
+                ${genre}
+            </h2>
+            <div class="genres__albums" data-albums-grid>{{albums}}</div>
+        </div>
+    `;
+};
+
 // Album Item HTML Template
 export const createAlbumHTML = (albumData) => {
     const { id, cover, title, artist } = albumData;

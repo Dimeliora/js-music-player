@@ -1,4 +1,4 @@
 // Albums DOM elements
 export const albumsElms = {
-    albumsGridElm: document.querySelector('[data-albums-grid]'),
+    albumsGenresElm: document.querySelector('[data-albums-genres]'),
 };

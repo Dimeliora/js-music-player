@@ -1,11 +1,14 @@
 import { albumsElms } from './albums-dom-elements';
 
 export const updateAlbumsActiveClass = ({ albumId }) => {
-    [...albumsElms.albumsGridElm.children].forEach((child) => {
-        if (child.dataset.albumId !== albumId) {
-            child.classList.remove('album--active');
+    const albums =
+        albumsElms.albumsGenresElm.querySelectorAll('[data-album-id]');
+
+    albums.forEach((album) => {
+        if (album.dataset.albumId !== albumId) {
+            album.classList.remove('album--active');
         } else {
-            child.classList.add('album--active');
+            album.classList.add('album--active');
         }
     });
 };

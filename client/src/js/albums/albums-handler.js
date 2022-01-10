@@ -6,7 +6,10 @@ import {
 } from '../service/fetch-data';
 import { state } from '../state/state';
 import { albumsElms } from './albums-dom-elements';
-import { createAlbumHTML } from './albums-template-creators';
+import {
+    createGenreBlockHTML,
+    createAlbumHTML,
+} from './albums-template-creators';
 import { updateAlbumsActiveClass } from './albums-view-updates';
 
 const albumClickHandler = async (e) => {
@@ -45,20 +48,45 @@ const albumsKeyboardHandler = (e) => {
     }
 };
 
+const createGenresSectionHTML = (albumsData) => {
+    const albumsByGenre = albumsData.reduce((acc, album) => {
+        const { genre } = album;
+        if (!acc[genre]) {
+            acc[genre] = [];
+        }
+
+        acc[genre].push(album);
+        return acc;
+    }, {});
+
+    let genreBlockMarkup = '';
+    for (const genre in albumsByGenre) {
+        const genreBlockTemplate = createGenreBlockHTML(genre);
+        const albumsMarkup = albumsByGenre[genre]
+            .map((album) => createAlbumHTML(album))
+            .join(' ');
+
+        genreBlockMarkup += genreBlockTemplate.replace(
+            '{{albums}}',
+            albumsMarkup
+        );
+    }
+
+    return genreBlockMarkup;
+};
+
 const albumsHandler = async () => {
     const albumsData = await getAlbumsData();
 
     state.albums = await getAlbumsCoverImages(albumsData);
 
-    const albumsMarkup = state.albums
-        .map((album) => createAlbumHTML(album))
-        .join(' ');
+    albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(
+        state.albums
+    );
 
-    albumsElms.albumsGridElm.innerHTML = albumsMarkup;
+    albumsElms.albumsGenresElm.addEventListener('click', albumClickHandler);
 
-    albumsElms.albumsGridElm.addEventListener('click', albumClickHandler);
-
-    albumsElms.albumsGridElm.addEventListener('keyup', albumsKeyboardHandler);
+    albumsElms.albumsGenresElm.addEventListener('keyup', albumsKeyboardHandler);
 
     ee.on('player/track-selected', updateAlbumsActiveClass);
 };

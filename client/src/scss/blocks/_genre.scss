@@ -1,4 +1,17 @@
-.genre {
+.genres {
+    &__item {
+        padding-bottom: 10px;
+        border-bottom: 1px solid $gray-light;
+
+        & + .genres__item {
+            margin-top: 40px;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+
     &__heading {
         font-size: 2.2rem;
         font-weight: 500;
@@ -8,7 +21,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, 190px);
         gap: 55px 30px;
-        margin-top: 30px;
+        margin-top: 20px;
 
         @media screen and (max-width: $xl) {
             grid-template-columns: repeat(auto-fill, 145px);
