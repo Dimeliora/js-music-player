@@ -11,7 +11,7 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "browserslist": "> 1%, last 2 versions, not dead",
+    "browserslist": "> 5%, last 2 versions, not ie <= 11, not dead",
     "devDependencies": {
         "@babel/core": "^7.16.0",
         "@babel/preset-env": "^7.16.4",
