@@ -3,6 +3,36 @@ import { renderWaveForm } from './player-waveform-handler';
 import { createTrackHTML } from './player-template-creators';
 import { getFormattedDuration } from '../helpers/duration-formatter';
 
+const getHiddenTitleWidth = () => {
+    const titleElm = playerElms.playerBlockElm.querySelector(
+        '[data-player-current-track]'
+    );
+    const titleWrapElm = titleElm.parentElement;
+
+    const titleWrapElmWidth = parseInt(getComputedStyle(titleWrapElm).width);
+    const titleElmWidth = parseInt(getComputedStyle(titleElm).width);
+
+    return Math.max(0, titleElmWidth - titleWrapElmWidth);
+};
+
+const handleCurrentTrackTitleAnimation = () => {
+    playerElms.playerCurrentTrackElm.removeAttribute('style');
+    playerElms.playerCurrentTrackElm.classList.remove(
+        'player__current-track-inner--animated'
+    );
+
+    const titleShiftPos = getHiddenTitleWidth();
+    if (titleShiftPos > 0) {
+        playerElms.playerCurrentTrackElm.style.setProperty(
+            '--title-shift-pos',
+            `${-titleShiftPos}px`
+        );
+        playerElms.playerCurrentTrackElm.classList.add(
+            'player__current-track-inner--animated'
+        );
+    }
+};
+
 export const updatePlayerAfterAlbumSelection = ({
     album,
     selectedTrack,
@@ -52,7 +82,14 @@ export const hidePlayerHandler = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
 };
 
-export const updatePlayerViewAfterTrackSelection = (selectedTrack) => {
+export const updatePlayerViewAfterTrackSelection = (selectedTrack, album) => {
+    playerElms.playerCurrentTrackElm.textContent = `${selectedTrack.title} - ${album.artist}`;
+    handleCurrentTrackTitleAnimation();
+
+    playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
+        selectedTrack.duration
+    );
+
     [...playerElms.playerTracklistElm.children].forEach((child) => {
         if (child.dataset.trackId !== selectedTrack.id) {
             child.classList.remove('track--playing');
@@ -60,14 +97,9 @@ export const updatePlayerViewAfterTrackSelection = (selectedTrack) => {
             child.classList.add('track--playing');
         }
     });
-
-    playerElms.playerTotalTimeElm.textContent = getFormattedDuration(
-        selectedTrack.duration
-    );
 };
 
 export const currentTimeUpdateHandler = () => {
     const current = playerElms.playerAudioElm.currentTime;
-
     playerElms.playerCurrentTimeElm.textContent = getFormattedDuration(current);
 };

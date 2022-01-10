@@ -133,8 +133,28 @@
         text-transform: uppercase;
     }
 
+    &__current-track {
+        width: 400px;
+        height: 18px;
+        margin: 30px auto 0;
+        overflow: hidden;
+        color: #ffffff;
+        font-size: 1.6rem;
+        line-height: 1.8rem;
+    }
+
+    &__current-track-inner {
+        --title-shift-pos: 0;
+        width: fit-content;
+        white-space: nowrap;
+
+        &--animated {
+            animation: foo 10s linear infinite alternate;
+        }
+    }
+
     &__progress {
-        margin-top: 30px;
+        margin-top: 15px;
         padding: 0 25px;
         cursor: pointer;
     }
@@ -151,5 +171,23 @@
         margin-top: 30px;
         padding: 0 15px;
         list-style-type: none;
+    }
+}
+
+@keyframes foo {
+    0% {
+        transform: translateX(0);
+    }
+
+    30% {
+        transform: translateX(0);
+    }
+
+    70% {
+        transform: translateX(var(--title-shift-pos));
+    }
+
+    100% {
+        transform: translateX(var(--title-shift-pos));
     }
 }

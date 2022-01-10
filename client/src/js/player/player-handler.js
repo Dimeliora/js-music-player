@@ -13,7 +13,7 @@ import {
 const updateSelectedTrackAndPlayer = (album, trackId) => {
     state.selectedTrack = album.tracklist.find(({ id }) => id === trackId);
 
-    updatePlayerViewAfterTrackSelection(state.selectedTrack);
+    updatePlayerViewAfterTrackSelection(state.selectedTrack, album);
 
     playerElms.playerAudioElm.src = getTrackFile(album.id, trackId);
 
