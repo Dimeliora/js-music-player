@@ -217,6 +217,12 @@ const watchers = () => {
 // ======== Build Task ========
 const build = series(
     clearDist,
+    parallel(html, scss, js, images, webpConvert, svg, fonts)
+);
+
+// ======== Prod Task ========
+const prod = series(
+    clearDist,
     parallel(html, scss, js, images, webpConvert, svg, fonts),
     series(makeFavicons, injectFavicons, clearFaviconData)
 );
@@ -226,4 +232,5 @@ const serve = series(build, parallel(devServer, watchers));
 
 // ======== Exports ========
 exports.build = build;
+exports.prod = prod;
 exports.serve = serve;

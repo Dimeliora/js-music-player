@@ -6,7 +6,7 @@
     "scripts": {
         "serve": "cross-env NODE_ENV=development gulp serve",
         "build": "cross-env NODE_ENV=development gulp build",
-        "prod": "cross-env NODE_ENV=production gulp build"
+        "prod": "cross-env NODE_ENV=production gulp prod"
     },
     "keywords": [],
     "author": "",
