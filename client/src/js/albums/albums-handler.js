@@ -78,8 +78,10 @@ const createGenresSectionHTML = (albumsData) => {
 const albumsHandler = async () => {
     const albumsData = await getAlbumsData();
 
-    state.albums = await getAlbumsCoverImages(albumsData);
+    const albums = await getAlbumsCoverImages(albumsData);
 
+    state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
+    
     albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(
         state.albums
     );
