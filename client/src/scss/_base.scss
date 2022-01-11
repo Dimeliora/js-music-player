@@ -51,9 +51,4 @@ main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding-right: 20px;
-
-    @media screen and (max-width: $lg) {
-        padding-right: 0;
-    }
 }
