@@ -71,11 +71,11 @@ export const updatePlayerAfterAlbumSelection = ({
     }
 
     showPlayerHandler();
-    playerElms.playerBlockElm.focus();
 };
 
 export const showPlayerHandler = () => {
     playerElms.playerBlockElm.classList.add('player--active');
+    playerElms.playerBlockElm.focus();
 };
 
 export const hidePlayerHandler = () => {
