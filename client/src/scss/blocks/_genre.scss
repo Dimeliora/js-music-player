@@ -1,14 +1,7 @@
 .genres {
     &__item {
-        padding-bottom: 10px;
-        border-bottom: 1px solid $gray-light;
-
         & + .genres__item {
-            margin-top: 40px;
-        }
-
-        &:last-child {
-            border-bottom: none;
+            margin-top: 50px;
         }
     }
 

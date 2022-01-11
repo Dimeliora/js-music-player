@@ -16,6 +16,10 @@
             visibility: visible;
             transition: visibility 0.1s ease-in 0.3s;
         }
+
+        @media screen and (max-width: $lg) {
+            flex-basis: 0;
+        }
     }
 
     &:focus,
@@ -33,19 +37,10 @@
         overflow: hidden;
         transition: right 0.2s linear;
 
-        // @media screen and (max-width: $lg) {
-        //     position: fixed;
-        //     top: 0;
-        //     right: -100vw;
-        //     width: 100%;
-        //     margin: 0;
-        //     flex-basis: auto;
-        //     transition: right 0.2s linear;
-
-        //     &--active {
-        //         right: 0;
-        //     }
-        // }
+        @media screen and (max-width: $sm) {
+            right: -100vw;
+            width: 100vw;
+        }
     }
 
     &__content {
@@ -53,10 +48,6 @@
         flex-direction: column;
         max-height: 100%;
         visibility: hidden;
-
-        // @media screen and (max-width: $lg) {
-        //     visibility: visible;
-        // }
     }
 
     &__hide {
@@ -73,9 +64,10 @@
         cursor: pointer;
         @include round-highlight($yellow-transparent);
 
-        // @media screen and (max-width: $lg) {
-        //     visibility: visible;
-        // }
+        @media screen and (max-width: $sm) {
+            top: 10px;
+            right: 10px;
+        }
     }
 
     &__hide-icon {
@@ -128,7 +120,7 @@
         font-weight: 500;
 
         @media screen and (max-width: $sm) {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
         }
     }
 
@@ -148,9 +140,9 @@
     }
 
     &__current-track {
-        width: 400px;
+        width: calc(100% - 50px);
         height: 18px;
-        margin: 30px auto 0;
+        margin: 30px 25px 0;
         overflow: hidden;
         color: #ffffff;
         font-size: 1.6rem;
