@@ -43,6 +43,7 @@ const albumsKeyboardHandler = (e) => {
     switch (e.key) {
         case 'Enter':
         case ' ':
+            e.preventDefault();
             albumClickHandler(e);
             break;
     }
@@ -81,14 +82,17 @@ const albumsHandler = async () => {
     const albums = await getAlbumsCoverImages(albumsData);
 
     state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
-    
+
     albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(
         state.albums
     );
 
     albumsElms.albumsGenresElm.addEventListener('click', albumClickHandler);
 
-    albumsElms.albumsGenresElm.addEventListener('keyup', albumsKeyboardHandler);
+    albumsElms.albumsGenresElm.addEventListener(
+        'keydown',
+        albumsKeyboardHandler
+    );
 
     ee.on('player/track-selected', updateAlbumsActiveClass);
 };

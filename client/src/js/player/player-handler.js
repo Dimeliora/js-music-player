@@ -18,6 +18,7 @@ const trackKeyboardHandler = (e) => {
     switch (e.key) {
         case 'Enter':
         case ' ':
+            e.preventDefault();
             trackClickHandler(e);
             break;
         case 'Escape':
@@ -113,7 +114,7 @@ ee.on('albums/show-player', showPlayerHandler);
 
 ee.on('progress/time-update', progressTimeUpdateHandler);
 
-playerElms.playerBlockElm.addEventListener('keyup', trackKeyboardHandler);
+playerElms.playerBlockElm.addEventListener('keydown', trackKeyboardHandler);
 
 playerElms.playerHideElm.addEventListener('click', hidePlayerHandler);
 
