@@ -4,21 +4,21 @@ import { playerElms } from './player-dom-elements';
 import { isTouchDevice } from '../helpers/touch-device-check';
 
 const calcCanvasAndPointWidth = () => {
-    let canvasWidth = 400;
-    let pointWidth = 3;
-    let pointMargin = 1;
+    let canvasWidth = 370;
+    let pointWidth = 2.5;
+    let pointMargin = 1.2;
 
-    // Preserving margin/width ratio 1/3
-    if (window.innerWidth <= 575) {
+    // Keep margin/width ratio ~1/2
+    if (window.innerWidth <= 767) {
         canvasWidth = window.innerWidth - CANVAS_X_PADDING;
-        pointWidth = ((canvasWidth / POINTS_COUNT) * 3) / 4;
-        pointMargin = canvasWidth / POINTS_COUNT / 4;
+        pointWidth = ((canvasWidth / POINTS_COUNT) * 2) / 3;
+        pointMargin = canvasWidth / POINTS_COUNT / 3;
     }
     return [canvasWidth, pointWidth, pointMargin];
 };
 
 const POINTS_COUNT = 100;
-const CANVAS_X_PADDING = 50;
+const CANVAS_X_PADDING = 30;
 const CANVAS_HEIGHT = 42;
 const POINT_FILL_COLOR = '#5c4e16';
 const POINT_BUFFERED_COLOR = '#927916';
