@@ -47,7 +47,12 @@
                     </div>
                 </header>
                 <main>
-                    <section class="genres" data-albums-genres></section>
+                    <section class="genres">
+                        <h2 class="genres__heading visually-hidden">
+                            Genres List
+                        </h2>
+                        <div class="genres__wrapper" data-albums-genres></div>
+                    </section>
                 </main>
             </div>
             <aside class="player" tabindex="0" data-player-block>
@@ -67,7 +72,7 @@
                         <div class="player__header">
                             <div class="player__cover-thumbnail">
                                 <img
-                                    src=""
+                                    src="/"
                                     alt=""
                                     class="player__cover-image"
                                     data-player-thumbnail
@@ -77,15 +82,21 @@
                                 <h2
                                     class="player__album-title"
                                     data-player-title
-                                ></h2>
+                                >
+                                    Unnamed Track
+                                </h2>
                                 <div
                                     class="player__album-artist"
                                     data-player-artist
-                                ></div>
+                                >
+                                    Unknown Artist
+                                </div>
                                 <div
                                     class="player__album-genre"
                                     data-player-genre
-                                ></div>
+                                >
+                                    Unknown Genre
+                                </div>
                             </div>
                         </div>
                         <div class="player__current-track">
