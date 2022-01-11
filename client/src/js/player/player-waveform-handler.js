@@ -1,23 +1,40 @@
 import { ee } from '../helpers/event-emitter';
 import { state } from '../state/state';
 import { playerElms } from './player-dom-elements';
+import { isTouchDevice } from '../helpers/touch-device-check';
 
-const CANVAS_WIDTH = 400;
+const calcCanvasAndPointWidth = () => {
+    let canvasWidth = 400;
+    let pointWidth = 3;
+    let pointMargin = 1;
+
+    // Preserving margin/width ratio 1/3
+    if (window.innerWidth <= 575) {
+        canvasWidth = window.innerWidth - CANVAS_X_PADDING;
+        pointWidth = ((canvasWidth / POINTS_COUNT) * 3) / 4;
+        pointMargin = canvasWidth / POINTS_COUNT / 4;
+    }
+    return [canvasWidth, pointWidth, pointMargin];
+};
+
+const POINTS_COUNT = 100;
+const CANVAS_X_PADDING = 50;
 const CANVAS_HEIGHT = 42;
-const POINT_WIDTH = 3;
-const POINT_MARGIN = 1;
 const POINT_FILL_COLOR = '#5c4e16';
 const POINT_BUFFERED_COLOR = '#927916';
 const POINT_PLAYED_COLOR = '#ffcd06';
 const POINT_HOVER_COLOR = '#e6e481';
 
+let [canvasWidth, pointWidth, pointMargin] = calcCanvasAndPointWidth();
+
 const canvas = playerElms.playerProgressElm;
 
-canvas.width = CANVAS_WIDTH;
+canvas.width = canvasWidth;
 canvas.height = CANVAS_HEIGHT;
 const ctx = canvas.getContext('2d');
 
 let hoverXCoord;
+let currentWaveformData;
 let playedPoint = 0;
 let bufferedPoint = 0;
 
@@ -28,7 +45,9 @@ const getPointCoords = ({
     canvasHeight,
     pointAmplitude,
 }) => {
-    const pointHeight = Math.round((pointAmplitude / 100) * canvasHeight);
+    const pointHeight = Math.round(
+        (pointAmplitude / POINTS_COUNT) * canvasHeight
+    );
     const vertCenter = Math.round((canvasHeight - pointHeight) / 2);
     return [
         index * (pointWidth + pointMargin),
@@ -44,7 +63,8 @@ export const renderWaveForm = (
     hoverXCoord,
     bufferedPoint
 ) => {
-    const data = waveformData ?? Array(100).fill(100);
+    const data = waveformData ?? Array(POINTS_COUNT).fill(100);
+    currentWaveformData = data;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -53,8 +73,8 @@ export const renderWaveForm = (
 
         const pointCoords = getPointCoords({
             index,
-            pointWidth: POINT_WIDTH,
-            pointMargin: POINT_MARGIN,
+            pointWidth: pointWidth,
+            pointMargin: pointMargin,
             canvasHeight: CANVAS_HEIGHT,
             pointAmplitude: point,
         });
@@ -94,7 +114,7 @@ ee.on('player/data-buffering', (bufferedTime) => {
 
     const trackBufferedTime = bufferedTime / selectedTrack.duration;
     bufferedPoint =
-        (CANVAS_WIDTH * trackBufferedTime) / (POINT_WIDTH + POINT_MARGIN);
+        (canvasWidth * trackBufferedTime) / (pointWidth + pointMargin);
 
     requestAnimationFrame(() =>
         renderWaveForm(
@@ -113,7 +133,7 @@ ee.on('player/time-updated', (currentTime) => {
     }
 
     const trackProgress = currentTime / selectedTrack.duration;
-    playedPoint = (CANVAS_WIDTH * trackProgress) / (POINT_WIDTH + POINT_MARGIN);
+    playedPoint = (canvasWidth * trackProgress) / (pointWidth + pointMargin);
 
     requestAnimationFrame(() =>
         renderWaveForm(
@@ -127,7 +147,7 @@ ee.on('player/time-updated', (currentTime) => {
 
 canvas.addEventListener('mousemove', ({ layerX }) => {
     const { selectedTrack } = state;
-    if (!selectedTrack) {
+    if (!selectedTrack || isTouchDevice()) {
         return;
     }
 
@@ -144,7 +164,7 @@ canvas.addEventListener('mousemove', ({ layerX }) => {
 
 canvas.addEventListener('mouseleave', () => {
     const { selectedTrack } = state;
-    if (!selectedTrack) {
+    if (!selectedTrack || isTouchDevice()) {
         return;
     }
 
@@ -167,6 +187,20 @@ canvas.addEventListener('click', ({ layerX }) => {
 
     ee.emit(
         'progress/time-update',
-        (selectedTrack.duration * layerX) / CANVAS_WIDTH
+        (selectedTrack.duration * layerX) / canvasWidth
+    );
+});
+
+window.addEventListener('resize', () => {
+    [canvasWidth, pointWidth, pointMargin] = calcCanvasAndPointWidth();
+    canvas.width = canvasWidth;
+
+    requestAnimationFrame(() =>
+        renderWaveForm(
+            currentWaveformData,
+            playedPoint,
+            hoverXCoord,
+            bufferedPoint
+        )
     );
 });
