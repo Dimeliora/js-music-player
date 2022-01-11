@@ -86,7 +86,7 @@ ee.on('player/audio-source-changed', () => {
     bufferedPoint = 0;
 });
 
-ee.on('player/data-buffering', ({ bufferedTime }) => {
+ee.on('player/data-buffering', (bufferedTime) => {
     const { selectedTrack } = state;
     if (!selectedTrack) {
         return;
@@ -106,7 +106,7 @@ ee.on('player/data-buffering', ({ bufferedTime }) => {
     );
 });
 
-ee.on('player/time-updated', ({ currentTime }) => {
+ee.on('player/time-updated', (currentTime) => {
     const { selectedTrack } = state;
     if (!selectedTrack) {
         return;
@@ -165,7 +165,8 @@ canvas.addEventListener('click', ({ layerX }) => {
         return;
     }
 
-    ee.emit('progress/time-update', {
-        newCurrentTime: (selectedTrack.duration * layerX) / CANVAS_WIDTH,
-    });
+    ee.emit(
+        'progress/time-update',
+        (selectedTrack.duration * layerX) / CANVAS_WIDTH
+    );
 });

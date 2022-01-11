@@ -1,6 +1,6 @@
 import { albumsElms } from './albums-dom-elements';
 
-export const updateAlbumsActiveClass = ({ albumId }) => {
+export const updateAlbumsActiveClass = (albumId) => {
     const albums =
         albumsElms.albumsGenresElm.querySelectorAll('[data-album-id]');
 

@@ -10,7 +10,7 @@ import {
     updatePlayerViewAfterTrackSelection,
 } from './player-view-updates';
 
-const progressTimeUpdateHandler = ({ newCurrentTime }) => {
+const progressTimeUpdateHandler = (newCurrentTime) => {
     playerElms.playerAudioElm.currentTime = newCurrentTime;
 };
 
@@ -45,7 +45,7 @@ const updateSelectedTrackAndAudio = (album, trackId) => {
 
     playerElms.playerAudioElm.src = getTrackFile(album.id, trackId);
 
-    ee.emit('player/track-selected', { albumId: state.playingAlbum.id });
+    ee.emit('player/track-selected', state.playingAlbum.id);
 };
 
 const trackClickHandler = (e) => {
@@ -74,9 +74,7 @@ const audioSrcChangeHandler = () => {
 
 const playerTimeUpdatedHandler = () => {
     currentTimeUpdateHandler();
-    ee.emit('player/time-updated', {
-        currentTime: playerElms.playerAudioElm.currentTime,
-    });
+    ee.emit('player/time-updated', playerElms.playerAudioElm.currentTime);
 };
 
 const playingTrackEndsHandler = () => {
@@ -103,9 +101,7 @@ const playingTrackEndsHandler = () => {
 const audioDataBufferingHandler = () => {
     const buffered = playerElms.playerAudioElm.buffered;
 
-    ee.emit('player/data-buffering', {
-        bufferedTime: buffered.end(buffered.length - 1),
-    });
+    ee.emit('player/data-buffering', buffered.end(buffered.length - 1));
 };
 
 ee.on('albums/album-selected', updatePlayerAfterAlbumSelection);

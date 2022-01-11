@@ -100,7 +100,7 @@ const createGenresSectionHTML = (albums) => {
 const renderGenresSectionContent = (albums, playingAlbumId) => {
     albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(albums);
 
-    updateAlbumsActiveClass({ albumId: playingAlbumId });
+    updateAlbumsActiveClass(playingAlbumId);
 };
 
 const albumsHandler = async () => {
