@@ -32,7 +32,7 @@ const albumSearchHandler = () => {
     const filteredAlbums = filterAlbums(state.albums, template, props);
 
     renderGenresSection(filteredAlbums, state.playingAlbum?.id);
-    handleSearchButtonVisibility(template.trim());
+    handleSearchButtonVisibility(template);
 };
 
 const clearSearchHandler = () => {
