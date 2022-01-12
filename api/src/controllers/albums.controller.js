@@ -6,7 +6,10 @@ const { getAlbumFile } = require('../helpers/get-album-file');
 exports.getAlbumsData = (_, res) => {
     fs.readFile(ALBUMS_DATA_FILE, (err, data) => {
         if (err) {
-            res.status(500).send({ message: 'Something went wrong!' });
+            res.status(500).send({
+                message:
+                    'Error occuring while trying to get albums data. Please, try later',
+            });
             return;
         }
 
@@ -34,7 +37,10 @@ exports.getAlbumsTracklist = (req, res) => {
 
     fs.readFile(ALBUMS_DATA_FILE, (err, data) => {
         if (err) {
-            res.status(500).send({ message: 'Something went wrong!' });
+            res.status(500).send({
+                message:
+                    'Error occuring while trying to get tracklist. Please, try later',
+            });
             return;
         }
 
@@ -51,7 +57,7 @@ exports.getAlbumTrack = (req, res) => {
     const trackFilePath = getAlbumFile(albumId, `${trackId}.mp3`);
     fs.stat(trackFilePath, (err, stats) => {
         if (err) {
-            res.status(500).send({ message: 'Something went wrong!' });
+            res.status(500).send({ message: 'Audiofile not found' });
             return;
         }
 
