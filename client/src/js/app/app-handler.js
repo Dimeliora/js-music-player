@@ -3,7 +3,7 @@ import { appElms } from './app-dom-elements';
 import { getAlbumsData, getAlbumsCoverImages } from '../service/fetch-data';
 import { alertHandle } from '../alerts/alerts-handler';
 
-const startAppHandler = async () => {
+const appStart = async () => {
     try {
         const albumsData = await getAlbumsData();
         const albums = await getAlbumsCoverImages(albumsData);
@@ -21,4 +21,4 @@ const startAppHandler = async () => {
     }
 };
 
-startAppHandler();
+appStart();

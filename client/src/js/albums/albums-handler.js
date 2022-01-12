@@ -31,7 +31,7 @@ const albumSearchHandler = (e) => {
     const template = e.target.value.toLowerCase();
     const filteredAlbums = filterAlbums(state.albums, template, props);
 
-    renderGenresSectionContent(filteredAlbums, state.playingAlbum?.id);
+    setAlbumsAndRenderGenresSection(filteredAlbums, state.playingAlbum?.id);
 };
 
 const albumClickHandler = async (e) => {
@@ -102,19 +102,15 @@ const createGenresSectionHTML = (albums) => {
     return genreBlockMarkup;
 };
 
-const renderGenresSectionContent = (albums, playingAlbumId) => {
+const setAlbumsAndRenderGenresSection = (albums, playingAlbumId) => {
+    state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
+
     albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(albums);
 
     updateAlbumsActiveClass(playingAlbumId);
 };
 
-const renderAlbums = async (albums) => {
-    state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
-
-    renderGenresSectionContent(state.albums);
-};
-
-ee.on('app/started', renderAlbums);
+ee.on('app/started', setAlbumsAndRenderGenresSection);
 
 ee.on('player/track-selected', updateAlbumsActiveClass);
 
