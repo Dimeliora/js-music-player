@@ -15,7 +15,7 @@ const getHiddenTitleWidth = () => {
     return Math.max(0, titleElmWidth - titleWrapElmWidth);
 };
 
-const handleCurrentTrackTitleAnimation = () => {
+export const handleCurrentTrackTitleAnimation = () => {
     playerElms.playerCurrentTrackElm.removeAttribute('style');
     playerElms.playerCurrentTrackElm.classList.remove(
         'player__current-track-inner--animated'

@@ -9,6 +9,7 @@ import {
     removeTrackPlayingClass,
     currentTimeUpdateHandler,
     updatePlayerAfterAlbumSelection,
+    handleCurrentTrackTitleAnimation,
     updatePlayerViewAfterTrackSelection,
 } from './player-view-updates';
 import { alertHandle } from '../alerts/alerts-handler';
@@ -154,3 +155,5 @@ playerElms.playerAudioElm.addEventListener(
     'progress',
     audioDataBufferingHandler
 );
+
+window.addEventListener('resize', handleCurrentTrackTitleAnimation);
