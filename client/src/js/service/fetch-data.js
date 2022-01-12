@@ -3,12 +3,22 @@ const BASE_URL = 'http://localhost:3000/api';
 export const getAlbumsData = async () => {
     const response = await fetch(`${BASE_URL}/albums`);
 
+    if (!response.ok) {
+        const { message } = await response.json();
+        throw new Error(message);
+    }
+
     return response.json();
 };
 
 export const getAlbumsCoverImages = async (albumsData) => {
     const requests = albumsData.map(async (album) => {
         const response = await fetch(`${BASE_URL}/albums/cover/${album.id}`);
+
+        if (!response.ok) {
+            const { message } = await response.json();
+            throw new Error(message);
+        }
 
         const coverImageData = await response.blob();
 

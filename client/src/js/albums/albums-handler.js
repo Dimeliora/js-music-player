@@ -1,9 +1,5 @@
 import { ee } from '../helpers/event-emitter';
-import {
-    getAlbumsData,
-    getAlbumTracklist,
-    getAlbumsCoverImages,
-} from '../service/fetch-data';
+import { getAlbumTracklist } from '../service/fetch-data';
 import { state } from '../state/state';
 import { debounce } from '../helpers/debounce';
 import { albumsElms } from './albums-dom-elements';
@@ -16,6 +12,7 @@ import {
     setSquizeClassOnSearch,
     removeSquizeClassOnSearch,
 } from './albums-view-updates';
+import { alertHandle } from '../alerts/alerts-handler';
 
 const hasStringMatch = (str, match) => str.toLowerCase().includes(match);
 
@@ -111,29 +108,23 @@ const renderGenresSectionContent = (albums, playingAlbumId) => {
     updateAlbumsActiveClass(playingAlbumId);
 };
 
-const albumsHandler = async () => {
-    const albumsData = await getAlbumsData();
-    const albums = await getAlbumsCoverImages(albumsData);
-
+const renderAlbums = async (albums) => {
     state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
 
     renderGenresSectionContent(state.albums);
-
-    albumsElms.albumsSearchElm.addEventListener(
-        'input',
-        debounce(albumSearchHandler, 700)
-    );
-
-    albumsElms.albumsGenresElm.addEventListener('click', albumClickHandler);
-
-    albumsElms.albumsGenresElm.addEventListener(
-        'keydown',
-        albumsKeyboardHandler
-    );
-
-    ee.on('player/track-selected', updateAlbumsActiveClass);
-
-    ee.on('player/player-hide-out', removeSquizeClassOnSearch);
 };
 
-albumsHandler();
+ee.on('app/started', renderAlbums);
+
+ee.on('player/track-selected', updateAlbumsActiveClass);
+
+ee.on('player/player-hide-out', removeSquizeClassOnSearch);
+
+albumsElms.albumsSearchElm.addEventListener(
+    'input',
+    debounce(albumSearchHandler, 700)
+);
+
+albumsElms.albumsGenresElm.addEventListener('click', albumClickHandler);
+
+albumsElms.albumsGenresElm.addEventListener('keydown', albumsKeyboardHandler);

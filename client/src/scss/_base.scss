@@ -43,8 +43,12 @@ main {
 }
 
 .container {
-    display: flex;
-    padding: 25px;
+    display: none;
+
+    &--visible {
+        display: flex;
+        padding: 25px;
+    }
 }
 
 .wrapper {
