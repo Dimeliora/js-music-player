@@ -1,6 +1,6 @@
 import { ee } from '../helpers/event-emitter';
 import { state } from '../state/state';
-import { appElms } from './app-dom-elements';
+import { showApp, showError } from './app-view-updates';
 import { getAlbumsData, getAlbumsCoverImages } from '../service/fetch-data';
 import { alertHandle } from '../alerts/alerts-handler';
 
@@ -11,16 +11,13 @@ const appStart = async () => {
 
         state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
 
-        appElms.appPreloaderElm.classList.add('preloader--hidden');
-        appElms.appBlockElm.classList.add('container--visible');
+        showApp();
 
         ee.emit('app/started', albums);
     } catch (error) {
         alertHandle(error.message, 'error');
 
-        appElms.appPreloaderElm.classList.add('preloader--static');
-        appElms.appPreloaderElm.firstElementChild.textContent =
-            'Service is unreachable. Please try again later';
+        showError();
     }
 };
 

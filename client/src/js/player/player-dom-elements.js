@@ -1,4 +1,3 @@
-// Player DOM elements
 export const playerElms = {
     playerBlockElm: document.querySelector('[data-player-block]'),
     playerHideElm: document.querySelector('[data-player-hide]'),

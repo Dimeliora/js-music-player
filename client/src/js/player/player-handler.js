@@ -5,6 +5,8 @@ import { getTrackFile } from '../service/fetch-data';
 import {
     showPlayer,
     hidePlayer,
+    setTrackPlayingClass,
+    removeTrackPlayingClass,
     currentTimeUpdateHandler,
     updatePlayerAfterAlbumSelection,
     updatePlayerViewAfterTrackSelection,
@@ -73,10 +75,10 @@ const trackClickHandler = async (e) => {
         }
 
         if (playerElms.playerAudioElm.paused) {
-            trackElm.classList.add('track--playing');
+            setTrackPlayingClass(trackElm);
             playerElms.playerAudioElm.play();
         } else {
-            trackElm.classList.remove('track--playing');
+            removeTrackPlayingClass(trackElm);
             playerElms.playerAudioElm.pause();
         }
     } catch (error) {

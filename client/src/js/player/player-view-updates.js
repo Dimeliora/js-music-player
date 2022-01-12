@@ -103,6 +103,14 @@ export const updatePlayerViewAfterTrackSelection = (selectedTrack, album) => {
     });
 };
 
+export const setTrackPlayingClass = (trackElm) => {
+    trackElm.classList.add('track--playing');
+};
+
+export const removeTrackPlayingClass = (trackElm) => {
+    trackElm.classList.remove('track--playing');
+};
+
 export const currentTimeUpdateHandler = () => {
     const current = playerElms.playerAudioElm.currentTime;
     playerElms.playerCurrentTimeElm.textContent = getFormattedDuration(current);
