@@ -30,16 +30,24 @@
         padding: 7px 16px;
         border: 1px solid #cccccc;
         border-radius: 200px;
-        transition: border-color 0.2s ease-out;
+        transition: border-color 0.2s ease-out, width 0.2s linear;
+
+        &--player-opened {
+            @media screen and (max-width: $lg) {
+                width: 140px;
+            }
+        }
 
         &:focus-within {
             border-color: $gray;
         }
 
-        @media screen and (max-width: $lg) {
-            width: 135px;
-            margin-right: 10px;
-            padding: 5px 12px;
+        @media screen and (max-width: $md) {
+            width: 200px;
+        }
+
+        @media screen and (max-width: $sm) {
+            width: 140px;
         }
     }
 

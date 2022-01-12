@@ -70,15 +70,15 @@ export const updatePlayerAfterAlbumSelection = ({
         requestAnimationFrame(() => renderWaveForm());
     }
 
-    showPlayerHandler();
+    showPlayer();
 };
 
-export const showPlayerHandler = () => {
+export const showPlayer = () => {
     playerElms.playerBlockElm.classList.add('player--active');
     playerElms.playerBlockElm.focus();
 };
 
-export const hidePlayerHandler = () => {
+export const hidePlayer = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
 };
 

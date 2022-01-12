@@ -3,8 +3,8 @@ import { state } from '../state/state';
 import { playerElms } from './player-dom-elements';
 import { getTrackFile } from '../service/fetch-data';
 import {
-    showPlayerHandler,
-    hidePlayerHandler,
+    showPlayer,
+    hidePlayer,
     currentTimeUpdateHandler,
     updatePlayerAfterAlbumSelection,
     updatePlayerViewAfterTrackSelection,
@@ -35,6 +35,11 @@ const trackKeyboardHandler = (e) => {
 
 const rewindTrackProgress = (step) => {
     playerElms.playerAudioElm.currentTime += step;
+};
+
+const hidePlayerHandler = () => {
+    ee.emit('player/player-hide-out');
+    hidePlayer();
 };
 
 const updateSelectedTrackAndAudio = (album, trackId) => {
@@ -106,7 +111,7 @@ const audioDataBufferingHandler = () => {
 
 ee.on('albums/album-selected', updatePlayerAfterAlbumSelection);
 
-ee.on('albums/show-player', showPlayerHandler);
+ee.on('albums/show-player', showPlayer);
 
 ee.on('progress/time-update', progressTimeUpdateHandler);
 

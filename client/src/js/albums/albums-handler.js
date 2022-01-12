@@ -11,7 +11,11 @@ import {
     createGenreBlockHTML,
     createAlbumHTML,
 } from './albums-template-creators';
-import { updateAlbumsActiveClass } from './albums-view-updates';
+import {
+    updateAlbumsActiveClass,
+    setSquizeClassOnSearch,
+    removeSquizeClassOnSearch,
+} from './albums-view-updates';
 
 const hasStringMatch = (str, match) => str.toLowerCase().includes(match);
 
@@ -41,6 +45,8 @@ const albumClickHandler = async (e) => {
 
     const albumId = albumElm.dataset.albumId;
     if (state.selectedAlbum?.id === albumId) {
+        setSquizeClassOnSearch();
+
         ee.emit('albums/show-player');
         return;
     }
@@ -52,6 +58,8 @@ const albumClickHandler = async (e) => {
     }
 
     state.selectedAlbum = album;
+
+    setSquizeClassOnSearch();
 
     ee.emit('albums/album-selected', {
         album,
@@ -124,6 +132,8 @@ const albumsHandler = async () => {
     );
 
     ee.on('player/track-selected', updateAlbumsActiveClass);
+
+    ee.on('player/player-hide-out', removeSquizeClassOnSearch);
 };
 
 albumsHandler();

@@ -12,3 +12,15 @@ export const updateAlbumsActiveClass = (albumId) => {
         }
     });
 };
+
+export const setSquizeClassOnSearch = () => {
+    albumsElms.albumsSearchElm.parentElement.classList.add(
+        'header__search--player-opened'
+    );
+}
+
+export const removeSquizeClassOnSearch = () => {
+    albumsElms.albumsSearchElm.parentElement.classList.remove(
+        'header__search--player-opened'
+    );
+}
