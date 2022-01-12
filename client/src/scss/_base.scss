@@ -42,6 +42,12 @@ main {
     margin: -1px;
 }
 
+.prevent-scroll {
+    @media screen and (max-width: $md) {
+        overflow: hidden;
+    }
+}
+
 .container {
     display: none;
 

@@ -76,10 +76,14 @@ export const updatePlayerAfterAlbumSelection = ({
 export const showPlayer = () => {
     playerElms.playerBlockElm.classList.add('player--active');
     playerElms.playerBlockElm.focus();
+
+    document.body.classList.add('prevent-scroll');
 };
 
 export const hidePlayer = () => {
     playerElms.playerBlockElm.classList.remove('player--active');
+
+    document.body.classList.remove('prevent-scroll');
 };
 
 export const updatePlayerViewAfterTrackSelection = (selectedTrack, album) => {
