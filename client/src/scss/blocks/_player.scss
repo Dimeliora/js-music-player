@@ -53,8 +53,8 @@
 
     &__hide {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 10px;
+        right: 10px;
         z-index: 100;
         display: flex;
         align-items: center;
@@ -63,12 +63,7 @@
         background-color: transparent;
         visibility: hidden;
         cursor: pointer;
-        @include round-highlight($yellow-transparent);
-
-        @media screen and (max-width: $sm) {
-            top: 10px;
-            right: 10px;
-        }
+        @include round-highlight($yellow-transparent, 30px);
     }
 
     &__hide-icon {

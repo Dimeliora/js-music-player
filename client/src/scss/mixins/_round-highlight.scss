@@ -1,12 +1,12 @@
-@mixin round-highlight($color) {
+@mixin round-highlight($color, $size) {
     &::after {
         content: '';
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) scale(0);
-        width: 40px;
-        height: 40px;
+        width: $size;
+        height: $size;
         border-radius: 50%;
         background-color: $color;
         transition: transform 0.1s ease-out;
