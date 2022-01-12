@@ -1,13 +1,12 @@
 .alert {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 20px;
+    right: 20px;
     z-index: 500;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     width: 100%;
-    padding: 20px;
 
     &__item {
         display: flex;

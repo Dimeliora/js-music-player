@@ -17,7 +17,7 @@ const startAppHandler = async () => {
 
         appElms.appPreloaderElm.classList.add('preloader--static');
         appElms.appPreloaderElm.firstElementChild.textContent =
-            'Serive is unreachable. Please, try again later';
+            'Service is unreachable. Please try again later';
     }
 };
 
