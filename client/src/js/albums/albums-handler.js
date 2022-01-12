@@ -12,6 +12,7 @@ import {
     updateAlbumsActiveClass,
     setSquizeClassOnSearch,
     removeSquizeClassOnSearch,
+    handleSearchButtonVisibility,
 } from './albums-view-updates';
 import { alertHandle } from '../alerts/alerts-handler';
 
@@ -25,12 +26,19 @@ const filterAlbums = (albums, template, props) => {
     });
 };
 
-const albumSearchHandler = (e) => {
+const albumSearchHandler = () => {
     const props = ['title', 'artist'];
-    const template = e.target.value.toLowerCase();
+    const template = albumsElms.albumsSearchElm.value.toLowerCase();
     const filteredAlbums = filterAlbums(state.albums, template, props);
 
     renderGenresSection(filteredAlbums, state.playingAlbum?.id);
+    handleSearchButtonVisibility(template.trim());
+};
+
+const clearSearchHandler = () => {
+    albumsElms.albumsSearchElm.value = '';
+
+    albumSearchHandler();
 };
 
 const albumClickHandler = async (e) => {
@@ -121,6 +129,8 @@ albumsElms.albumsSearchElm.addEventListener(
     'input',
     debounce(albumSearchHandler, 700)
 );
+
+albumsElms.albumsSearchClearElm.addEventListener('click', clearSearchHandler);
 
 albumsElms.albumsGenresElm.addEventListener('click', albumClickHandler);
 

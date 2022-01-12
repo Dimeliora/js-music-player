@@ -38,6 +38,18 @@
             }
         }
 
+        &--not-empty {
+            .header__search-clear {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            & > .header__search-icon {
+                display: none;
+            }
+        }
+
         &:focus-within {
             border-color: $gray;
         }
@@ -61,6 +73,14 @@
         @media screen and (max-width: $sm) {
             margin-right: 5px;
         }
+    }
+
+    &__search-clear {
+        display: none;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
     }
 
     &__search-input {
