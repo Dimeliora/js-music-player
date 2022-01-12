@@ -25,6 +25,13 @@ export const getAlbumTracklist = async (albumId) => {
     return response.json();
 };
 
-export const getTrackFile = (albumId, trackId) => {
+export const getTrackFile = async (albumId, trackId) => {
+    const response = await fetch(`${BASE_URL}/albums/${albumId}/${trackId}`);
+
+    if (!response.ok) {
+        const { message } = await response.json();
+        throw new Error(message);
+    }
+
     return `${BASE_URL}/albums/${albumId}/${trackId}`;
 };

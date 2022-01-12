@@ -9,6 +9,7 @@ import {
     updatePlayerAfterAlbumSelection,
     updatePlayerViewAfterTrackSelection,
 } from './player-view-updates';
+import { alertHandle } from '../alerts/alerts-handler';
 
 const progressTimeUpdateHandler = (newCurrentTime) => {
     playerElms.playerAudioElm.currentTime = newCurrentTime;
@@ -42,34 +43,44 @@ const hidePlayerHandler = () => {
     hidePlayer();
 };
 
-const updateSelectedTrackAndAudio = (album, trackId) => {
-    state.selectedTrack = album.tracklist.find(({ id }) => id === trackId);
-    state.playingAlbum = album;
+const updateSelectedTrackAndAudio = async (album, trackId) => {
+    try {
+        const trackFileSource = await getTrackFile(album.id, trackId);
 
-    updatePlayerViewAfterTrackSelection(state.selectedTrack, album);
+        state.selectedTrack = album.tracklist.find(({ id }) => id === trackId);
+        state.playingAlbum = album;
 
-    playerElms.playerAudioElm.src = getTrackFile(album.id, trackId);
+        playerElms.playerAudioElm.src = trackFileSource;
 
-    ee.emit('player/track-selected', state.playingAlbum.id);
+        updatePlayerViewAfterTrackSelection(state.selectedTrack, album);
+
+        ee.emit('player/track-selected', state.playingAlbum.id);
+    } catch (error) {
+        throw new Error(error.message);
+    }
 };
 
-const trackClickHandler = (e) => {
+const trackClickHandler = async (e) => {
     const trackElm = e.target.closest('[data-track-id]');
     if (!trackElm) {
         return;
     }
 
     const trackId = trackElm.dataset.trackId;
-    if (state.selectedTrack?.id !== trackId) {
-        updateSelectedTrackAndAudio(state.selectedAlbum, trackId);
-    }
+    try {
+        if (state.selectedTrack?.id !== trackId) {
+            await updateSelectedTrackAndAudio(state.selectedAlbum, trackId);
+        }
 
-    if (playerElms.playerAudioElm.paused) {
-        trackElm.classList.add('track--playing');
-        playerElms.playerAudioElm.play();
-    } else {
-        trackElm.classList.remove('track--playing');
-        playerElms.playerAudioElm.pause();
+        if (playerElms.playerAudioElm.paused) {
+            trackElm.classList.add('track--playing');
+            playerElms.playerAudioElm.play();
+        } else {
+            trackElm.classList.remove('track--playing');
+            playerElms.playerAudioElm.pause();
+        }
+    } catch (error) {
+        alertHandle(error.message, 'error');
     }
 };
 
@@ -82,24 +93,31 @@ const playerTimeUpdatedHandler = () => {
     ee.emit('player/time-updated', playerElms.playerAudioElm.currentTime);
 };
 
-const playingTrackEndsHandler = () => {
+const playingTrackEndsHandler = async () => {
     const trackIndex = state.playingAlbum.tracklist.findIndex(
         (track) => track.id === state.selectedTrack.id
     );
     const nextTrack = state.playingAlbum.tracklist[trackIndex + 1];
 
-    if (nextTrack) {
-        updateSelectedTrackAndAudio(state.playingAlbum, nextTrack.id);
-        playerElms.playerAudioElm.play();
-    } else {
-        const trackElm = playerElms.playerTracklistElm.querySelector(
-            `[data-track-id="${state.selectedTrack.id}"]`
-        );
-        if (trackElm) {
-            trackElm.classList.remove('track--playing');
-        }
+    try {
+        if (nextTrack) {
+            await updateSelectedTrackAndAudio(state.playingAlbum, nextTrack.id);
+            playerElms.playerAudioElm.play();
+        } else {
+            const trackElm = playerElms.playerTracklistElm.querySelector(
+                `[data-track-id="${state.selectedTrack.id}"]`
+            );
+            if (trackElm) {
+                trackElm.classList.remove('track--playing');
+            }
 
-        playerElms.playerAudioElm.currentTime = 0;
+            playerElms.playerAudioElm.currentTime = 0;
+        }
+    } catch (error) {
+        alertHandle(error.message, 'error');
+
+        state.selectedTrack = nextTrack;
+        playingTrackEndsHandler();
     }
 };
 
