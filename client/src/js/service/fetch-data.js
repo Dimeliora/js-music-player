@@ -32,6 +32,11 @@ export const getAlbumsCoverImages = async (albumsData) => {
 export const getAlbumTracklist = async (albumId) => {
     const response = await fetch(`${BASE_URL}/albums/tracklist/${albumId}`);
 
+    if (!response.ok) {
+        const { message } = await response.json();
+        throw new Error(message);
+    }
+
     return response.json();
 };
 

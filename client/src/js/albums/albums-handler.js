@@ -2,6 +2,7 @@ import { ee } from '../helpers/event-emitter';
 import { getAlbumTracklist } from '../service/fetch-data';
 import { state } from '../state/state';
 import { debounce } from '../helpers/debounce';
+import { isStringIncludes } from '../helpers/is-string-includes';
 import { albumsElms } from './albums-dom-elements';
 import {
     createGenreBlockHTML,
@@ -14,15 +15,13 @@ import {
 } from './albums-view-updates';
 import { alertHandle } from '../alerts/alerts-handler';
 
-const hasStringMatch = (str, match) => str.toLowerCase().includes(match);
-
 const filterAlbums = (albums, template, props) => {
     if (template.trim() === '') {
         return albums;
     }
 
     return albums.filter((album) => {
-        return props.some((prop) => hasStringMatch(album[prop], template));
+        return props.some((prop) => isStringIncludes(album[prop], template));
     });
 };
 
@@ -31,7 +30,7 @@ const albumSearchHandler = (e) => {
     const template = e.target.value.toLowerCase();
     const filteredAlbums = filterAlbums(state.albums, template, props);
 
-    setAlbumsAndRenderGenresSection(filteredAlbums, state.playingAlbum?.id);
+    renderGenresSection(filteredAlbums, state.playingAlbum?.id);
 };
 
 const albumClickHandler = async (e) => {
@@ -48,21 +47,25 @@ const albumClickHandler = async (e) => {
         return;
     }
 
-    const { selectedTrack, playingAlbum } = state;
-    const album = state.albums.find(({ id }) => id === albumId);
-    if (!album.tracklist) {
-        album.tracklist = await getAlbumTracklist(albumId);
+    try {
+        const { selectedTrack, playingAlbum } = state;
+        const album = state.albums.find(({ id }) => id === albumId);
+        if (!album.tracklist) {
+            album.tracklist = await getAlbumTracklist(albumId);
+        }
+
+        state.selectedAlbum = album;
+
+        setSquizeClassOnSearch();
+
+        ee.emit('albums/album-selected', {
+            album,
+            selectedTrack,
+            playingAlbum,
+        });
+    } catch (error) {
+        alertHandle(error.message, 'error');
     }
-
-    state.selectedAlbum = album;
-
-    setSquizeClassOnSearch();
-
-    ee.emit('albums/album-selected', {
-        album,
-        selectedTrack,
-        playingAlbum,
-    });
 };
 
 const albumsKeyboardHandler = (e) => {
@@ -102,15 +105,13 @@ const createGenresSectionHTML = (albums) => {
     return genreBlockMarkup;
 };
 
-const setAlbumsAndRenderGenresSection = (albums, playingAlbumId) => {
-    state.albums = albums.sort((a, b) => a.genre.localeCompare(b.genre));
-
+const renderGenresSection = (albums, playingAlbumId) => {
     albumsElms.albumsGenresElm.innerHTML = createGenresSectionHTML(albums);
 
     updateAlbumsActiveClass(playingAlbumId);
 };
 
-ee.on('app/started', setAlbumsAndRenderGenresSection);
+ee.on('app/started', renderGenresSection);
 
 ee.on('player/track-selected', updateAlbumsActiveClass);
 
