@@ -4,6 +4,16 @@
     justify-content: center;
     height: 100vh;
 
+    &--hidden {
+        display: none;
+    }
+
+    &--static {
+        .preloader__text {
+            animation: none;
+        }
+    }
+
     &__text {
         color: $gray;
         font-size: 4.2rem;
@@ -24,10 +34,6 @@
             max-width: 320px;
             font-size: 2.4rem;
         }
-    }
-
-    &--hidden {
-        display: none;
     }
 }
 

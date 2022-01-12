@@ -14,6 +14,10 @@ const startAppHandler = async () => {
         ee.emit('app/started', albums);
     } catch (error) {
         alertHandle(error.message, 'error');
+
+        appElms.appPreloaderElm.classList.add('preloader--static');
+        appElms.appPreloaderElm.firstElementChild.textContent =
+            'Serive is unreachable. Please, try again later';
     }
 };
 
