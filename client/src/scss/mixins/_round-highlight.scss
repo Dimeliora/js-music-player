@@ -12,8 +12,8 @@
         transition: transform 0.1s ease-out;
     }
 
-    &:focus,
-    &:hover {
+    &:hover,
+    &:focus-visible {
         &::after {
             transform: translate(-50%, -50%) scale(1);
 
