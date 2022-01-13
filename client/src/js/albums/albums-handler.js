@@ -35,6 +35,10 @@ const albumSearchHandler = () => {
     handleSearchButtonVisibility(template);
 };
 
+const searchButtonVisibilityHandler = () => {
+    handleSearchButtonVisibility(albumsElms.albumsSearchElm.value);
+};
+
 const clearSearchHandler = () => {
     albumsElms.albumsSearchElm.value = '';
 
@@ -128,6 +132,11 @@ ee.on('player/player-hide-out', removeSquizeClassOnSearch);
 albumsElms.albumsSearchElm.addEventListener(
     'input',
     debounce(albumSearchHandler, 700)
+);
+
+albumsElms.albumsSearchElm.addEventListener(
+    'input',
+    searchButtonVisibilityHandler
 );
 
 albumsElms.albumsSearchClearElm.addEventListener('click', clearSearchHandler);
