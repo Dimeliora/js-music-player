@@ -4,7 +4,7 @@ class EventEmitter {
     }
 
     on(event, cb) {
-        if (this.events[event] === undefined) {
+        if (!this.events[event]) {
             this.events[event] = [];
         }
 
@@ -18,7 +18,7 @@ class EventEmitter {
     }
 
     emit(event, payload) {
-        if (this.events[event] === undefined) {
+        if (!this.events[event]) {
             return;
         }
 
