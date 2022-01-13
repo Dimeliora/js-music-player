@@ -41,6 +41,7 @@ const searchButtonVisibilityHandler = () => {
 const clearSearchHandler = () => {
     albumsElms.albumsSearchElm.value = '';
 
+    handleSearchButtonVisibility(albumsElms.albumsSearchElm.value);
     albumSearchHandler();
 };
 

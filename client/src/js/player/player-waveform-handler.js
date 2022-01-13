@@ -20,6 +20,7 @@ const calcCanvasAndPointWidth = () => {
 const POINTS_COUNT = 100;
 const CANVAS_X_PADDING = 30;
 const CANVAS_HEIGHT = 42;
+const DEFAULT_WAVEFORM_DATA = Array(POINTS_COUNT).fill(100);
 const POINT_FILL_COLOR = '#5c4e16';
 const POINT_BUFFERED_COLOR = '#927916';
 const POINT_PLAYED_COLOR = '#ffcd06';
@@ -34,9 +35,8 @@ canvas.height = CANVAS_HEIGHT;
 const ctx = canvas.getContext('2d');
 
 let hoverXCoord;
-let currentWaveformData;
-let playedPoint = 0;
-let bufferedPoint = 0;
+let lastPlayedPoint = 0;
+let lastBufferedPoint = 0;
 
 const getPointCoords = ({
     index,
@@ -45,9 +45,7 @@ const getPointCoords = ({
     canvasHeight,
     pointAmplitude,
 }) => {
-    const pointHeight = Math.round(
-        (pointAmplitude / POINTS_COUNT) * canvasHeight
-    );
+    const pointHeight = Math.round((pointAmplitude / 100) * canvasHeight);
     const vertCenter = Math.round((canvasHeight - pointHeight) / 2);
     return [
         index * (pointWidth + pointMargin),
@@ -59,12 +57,11 @@ const getPointCoords = ({
 
 export const renderWaveForm = (
     waveformData,
-    playedPoint = 0,
+    lastPlayedPoint,
     hoverXCoord,
-    bufferedPoint
+    lastBufferedPoint
 ) => {
-    const data = waveformData ?? Array(POINTS_COUNT).fill(100);
-    currentWaveformData = data;
+    const data = waveformData ?? DEFAULT_WAVEFORM_DATA;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -82,8 +79,8 @@ export const renderWaveForm = (
         ctx.rect(...pointCoords);
 
         const isPointHovered = hoverXCoord >= pointCoords[0];
-        const isPointPlayed = index < playedPoint;
-        const isPointBuffered = index < bufferedPoint;
+        const isPointPlayed = index < lastPlayedPoint;
+        const isPointBuffered = index < lastBufferedPoint;
 
         if (isPointBuffered) {
             ctx.fillStyle = POINT_BUFFERED_COLOR;
@@ -103,44 +100,39 @@ export const renderWaveForm = (
 };
 
 ee.on('player/audio-source-changed', () => {
-    bufferedPoint = 0;
+    lastBufferedPoint = 0;
 });
 
 ee.on('player/data-buffering', (bufferedTime) => {
     const { selectedTrack } = state;
-    if (!selectedTrack) {
-        return;
-    }
 
     const trackBufferedTime = bufferedTime / selectedTrack.duration;
-    bufferedPoint =
+    lastBufferedPoint =
         (canvasWidth * trackBufferedTime) / (pointWidth + pointMargin);
 
     requestAnimationFrame(() =>
         renderWaveForm(
             selectedTrack.waveformData,
-            playedPoint,
+            lastPlayedPoint,
             hoverXCoord,
-            bufferedPoint
+            lastBufferedPoint
         )
     );
 });
 
 ee.on('player/time-updated', (currentTime) => {
     const { selectedTrack } = state;
-    if (!selectedTrack) {
-        return;
-    }
 
     const trackProgress = currentTime / selectedTrack.duration;
-    playedPoint = (canvasWidth * trackProgress) / (pointWidth + pointMargin);
+    lastPlayedPoint =
+        (canvasWidth * trackProgress) / (pointWidth + pointMargin);
 
     requestAnimationFrame(() =>
         renderWaveForm(
             selectedTrack.waveformData,
-            playedPoint,
+            lastPlayedPoint,
             hoverXCoord,
-            bufferedPoint
+            lastBufferedPoint
         )
     );
 });
@@ -155,9 +147,9 @@ canvas.addEventListener('mousemove', ({ layerX }) => {
     requestAnimationFrame(() =>
         renderWaveForm(
             selectedTrack.waveformData,
-            playedPoint,
+            lastPlayedPoint,
             hoverXCoord,
-            bufferedPoint
+            lastBufferedPoint
         )
     );
 });
@@ -172,9 +164,9 @@ canvas.addEventListener('mouseleave', () => {
     requestAnimationFrame(() =>
         renderWaveForm(
             selectedTrack.waveformData,
-            playedPoint,
+            lastPlayedPoint,
             hoverXCoord,
-            bufferedPoint
+            lastBufferedPoint
         )
     );
 });
@@ -192,15 +184,20 @@ canvas.addEventListener('click', ({ layerX }) => {
 });
 
 window.addEventListener('resize', () => {
+    let waveformData = state.selectedTrack?.waveformData;
+    if (!waveformData) {
+        waveformData = DEFAULT_WAVEFORM_DATA;
+    }
+
     [canvasWidth, pointWidth, pointMargin] = calcCanvasAndPointWidth();
     canvas.width = canvasWidth;
 
     requestAnimationFrame(() =>
         renderWaveForm(
-            currentWaveformData,
-            playedPoint,
+            waveformData,
+            lastPlayedPoint,
             hoverXCoord,
-            bufferedPoint
+            lastBufferedPoint
         )
     );
 });
