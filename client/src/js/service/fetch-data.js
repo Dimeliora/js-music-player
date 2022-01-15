@@ -41,11 +41,12 @@ export const getAlbumTracklist = async (albumId) => {
 };
 
 export const getTrackFile = async (albumId, trackId) => {
-    const response = await fetch(`${BASE_URL}/albums/${albumId}/${trackId}`);
+    const response = await fetch(`${BASE_URL}/albums/${albumId}/${trackId}`, {
+        method: 'HEAD',
+    });
 
     if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message);
+        throw new Error('Audiofile not found');
     }
 
     return `${BASE_URL}/albums/${albumId}/${trackId}`;
