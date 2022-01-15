@@ -51,13 +51,24 @@ exports.getAlbumsTracklist = (req, res) => {
     });
 };
 
+exports.checkAlbumTrackExistance = (req, res) => {
+    const { albumId, trackId } = req.params;
+
+    const trackFilePath = getAlbumFile(albumId, `${trackId}.mp3`);
+    if (fs.existsSync(trackFilePath)) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(404);
+    }
+};
+
 exports.getAlbumTrack = (req, res) => {
     const { albumId, trackId } = req.params;
 
     const trackFilePath = getAlbumFile(albumId, `${trackId}.mp3`);
     fs.stat(trackFilePath, (err, stats) => {
         if (err) {
-            res.status(500).send({ message: 'Audiofile not found' });
+            res.status(404).send({ message: 'Audiofile not found' });
             return;
         }
 
