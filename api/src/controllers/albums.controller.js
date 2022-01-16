@@ -29,7 +29,12 @@ exports.getAlbumsData = (_, res) => {
 exports.getAlbumsCoverImages = (req, res) => {
     const albumId = req.params.id;
 
-    res.sendFile(getAlbumFile(albumId, 'cover.jpg'));
+    const albumCoverPath = getAlbumFile(albumId, 'cover.jpg');
+    if (fs.existsSync(albumCoverPath)) {
+        res.sendFile(albumCoverPath);
+    } else {
+        res.sendStatus(404);
+    }
 };
 
 exports.getAlbumsTracklist = (req, res) => {
