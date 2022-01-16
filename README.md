@@ -68,8 +68,7 @@
 -   build - сборка в development-режиме
 -   prod - сборка в production-режиме
 
-В режиме production осуществляется минификация HTML, CSS и JS кода, без записи source-map.
-В режиме production происходит создание и подключение favicon.
+В режиме production осуществляется минификация HTML, CSS и JS кода без записи source-map, создание и подключение favicon.
 
 #### ВНИМАНИЕ
 
