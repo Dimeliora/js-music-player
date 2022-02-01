@@ -1,7 +1,7 @@
 import { playerElms } from './player-dom-elements';
 import { renderWaveForm } from './player-waveform-handler';
 import { createTrackHTML } from './player-template-creators';
-import { getFormattedDuration } from '../helpers/duration-formatter';
+import { getFormattedDuration } from '../../helpers/duration-formatter';
 
 const getHiddenTitleWidth = () => {
     const titleElm = playerElms.playerBlockElm.querySelector(

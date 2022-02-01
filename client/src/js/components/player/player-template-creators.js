@@ -1,6 +1,5 @@
-import { getFormattedDuration } from '../helpers/duration-formatter';
+import { getFormattedDuration } from '../../helpers/duration-formatter';
 
-// Track Item HTML Template
 export const createTrackHTML = (trackData) => {
     const { id, index, title, artist, duration, isPlaying } = trackData;
 

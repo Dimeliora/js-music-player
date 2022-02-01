@@ -1,7 +1,7 @@
-import { ee } from '../helpers/event-emitter';
-import { state } from '../state/state';
+import playerState from '../../state/player-state';
+import { ee } from '../../helpers/event-emitter';
 import { playerElms } from './player-dom-elements';
-import { getTrackFile } from '../service/fetch-data';
+import { getTrackFile } from '../../service/fetch-data';
 import {
     showPlayer,
     hidePlayer,
@@ -50,14 +50,16 @@ const updateSelectedTrackAndAudio = async (album, trackId) => {
     try {
         const trackFileSource = await getTrackFile(album.id, trackId);
 
-        state.selectedTrack = album.tracklist.find(({ id }) => id === trackId);
-        state.playingAlbum = album;
+        const selectedTrack = album.tracklist.find(({ id }) => id === trackId);
+
+        playerState.setSelectedTrack(selectedTrack);
+        playerState.setPlayingAlbum(album);
 
         playerElms.playerAudioElm.src = trackFileSource;
 
-        updatePlayerViewAfterTrackSelection(state.selectedTrack, album);
+        updatePlayerViewAfterTrackSelection(playerState.selectedTrack, album);
 
-        ee.emit('player/track-selected', state.playingAlbum.id);
+        ee.emit('player/track-selected', playerState.playingAlbum.id);
     } catch (error) {
         throw new Error(error.message);
     }
@@ -71,8 +73,11 @@ const trackClickHandler = async (e) => {
 
     const trackId = trackElm.dataset.trackId;
     try {
-        if (state.selectedTrack?.id !== trackId) {
-            await updateSelectedTrackAndAudio(state.selectedAlbum, trackId);
+        if (playerState.selectedTrack?.id !== trackId) {
+            await updateSelectedTrackAndAudio(
+                playerState.selectedAlbum,
+                trackId
+            );
         }
 
         if (playerElms.playerAudioElm.paused) {
@@ -97,18 +102,21 @@ const playerTimeUpdatedHandler = () => {
 };
 
 const playingTrackEndsHandler = async () => {
-    const trackIndex = state.playingAlbum.tracklist.findIndex(
-        (track) => track.id === state.selectedTrack.id
+    const trackIndex = playerState.playingAlbum.tracklist.findIndex(
+        (track) => track.id === playerState.selectedTrack.id
     );
-    const nextTrack = state.playingAlbum.tracklist[trackIndex + 1];
+    const nextTrack = playerState.playingAlbum.tracklist[trackIndex + 1];
 
     try {
         if (nextTrack) {
-            await updateSelectedTrackAndAudio(state.playingAlbum, nextTrack.id);
+            await updateSelectedTrackAndAudio(
+                playerState.playingAlbum,
+                nextTrack.id
+            );
             playerElms.playerAudioElm.play();
         } else {
             const trackElm = playerElms.playerTracklistElm.querySelector(
-                `[data-track-id="${state.selectedTrack.id}"]`
+                `[data-track-id="${playerState.selectedTrack.id}"]`
             );
             if (trackElm) {
                 trackElm.classList.remove('track--playing');
@@ -119,7 +127,7 @@ const playingTrackEndsHandler = async () => {
     } catch (error) {
         alertHandle(error.message, 'error');
 
-        state.selectedTrack = nextTrack;
+        playerState.setSelectedTrack(nextTrack);
         playingTrackEndsHandler();
     }
 };

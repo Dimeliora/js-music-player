@@ -1,7 +1,7 @@
-import { ee } from '../helpers/event-emitter';
-import { state } from '../state/state';
+import playerState from '../../state/player-state';
+import { ee } from '../../helpers/event-emitter';
 import { playerElms } from './player-dom-elements';
-import { isTouchDevice } from '../helpers/touch-device-check';
+import { isTouchDevice } from '../../helpers/touch-device-check';
 
 const calcCanvasAndPointWidth = () => {
     let canvasWidth = 370;
@@ -104,7 +104,7 @@ ee.on('player/audio-source-changed', () => {
 });
 
 ee.on('player/data-buffering', (bufferedTime) => {
-    const { selectedTrack } = state;
+    const { selectedTrack } = playerState;
 
     const trackBufferedTime = bufferedTime / selectedTrack.duration;
     lastBufferedPoint =
@@ -121,7 +121,7 @@ ee.on('player/data-buffering', (bufferedTime) => {
 });
 
 ee.on('player/time-updated', (currentTime) => {
-    const { selectedTrack } = state;
+    const { selectedTrack } = playerState;
 
     const trackProgress = currentTime / selectedTrack.duration;
     lastPlayedPoint =
@@ -138,7 +138,7 @@ ee.on('player/time-updated', (currentTime) => {
 });
 
 canvas.addEventListener('mousemove', ({ layerX }) => {
-    const { selectedTrack } = state;
+    const { selectedTrack } = playerState;
     if (!selectedTrack || isTouchDevice()) {
         return;
     }
@@ -155,7 +155,7 @@ canvas.addEventListener('mousemove', ({ layerX }) => {
 });
 
 canvas.addEventListener('mouseleave', () => {
-    const { selectedTrack } = state;
+    const { selectedTrack } = playerState;
     if (!selectedTrack || isTouchDevice()) {
         return;
     }
@@ -172,7 +172,7 @@ canvas.addEventListener('mouseleave', () => {
 });
 
 canvas.addEventListener('click', ({ layerX }) => {
-    const { selectedTrack } = state;
+    const { selectedTrack } = playerState;
     if (!selectedTrack) {
         return;
     }
@@ -184,7 +184,7 @@ canvas.addEventListener('click', ({ layerX }) => {
 });
 
 window.addEventListener('resize', () => {
-    let waveformData = state.selectedTrack?.waveformData;
+    let waveformData = playerState.selectedTrack?.waveformData;
     if (!waveformData) {
         waveformData = DEFAULT_WAVEFORM_DATA;
     }

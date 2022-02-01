@@ -1,8 +1,8 @@
-import { ee } from '../helpers/event-emitter';
-import { getAlbumTracklist } from '../service/fetch-data';
-import { state } from '../state/state';
-import { debounce } from '../helpers/debounce';
-import { isStringIncludes } from '../helpers/is-string-includes';
+import playerState from '../../state/player-state';
+import { ee } from '../../helpers/event-emitter';
+import { getAlbumTracklist } from '../../service/fetch-data';
+import { debounce } from '../../helpers/debounce';
+import { isStringIncludes } from '../../helpers/is-string-includes';
 import { albumsElms } from './albums-dom-elements';
 import {
     createGenreBlockHTML,
@@ -29,9 +29,9 @@ const filterAlbums = (albums, template, props) => {
 const albumSearchHandler = () => {
     const props = ['title', 'artist'];
     const template = albumsElms.albumsSearchElm.value.toLowerCase();
-    const filteredAlbums = filterAlbums(state.albums, template, props);
+    const filteredAlbums = filterAlbums(playerState.albums, template, props);
 
-    renderGenresSection(filteredAlbums, state.playingAlbum?.id);
+    renderGenresSection(filteredAlbums, playerState.playingAlbum?.id);
 };
 
 const searchButtonVisibilityHandler = () => {
@@ -52,7 +52,7 @@ const albumClickHandler = async (e) => {
     }
 
     const albumId = albumElm.dataset.albumId;
-    if (state.selectedAlbum?.id === albumId) {
+    if (playerState.selectedAlbum?.id === albumId) {
         setSquizeClassOnSearch();
 
         ee.emit('albums/show-player');
@@ -60,13 +60,13 @@ const albumClickHandler = async (e) => {
     }
 
     try {
-        const { selectedTrack, playingAlbum } = state;
-        const album = state.albums.find(({ id }) => id === albumId);
+        const { selectedTrack, playingAlbum } = playerState;
+        const album = playerState.albums.find(({ id }) => id === albumId);
         if (!album.tracklist) {
             album.tracklist = await getAlbumTracklist(albumId);
         }
 
-        state.selectedAlbum = album;
+        playerState.setSelectedAlbumData(album);
 
         setSquizeClassOnSearch();
 

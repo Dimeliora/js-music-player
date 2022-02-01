@@ -1,3 +1,3 @@
 import './app/app-handler';
-import './albums/albums-handler';
-import './player/player-handler';
+import './components/albums/albums-handler';
+import './components/player/player-handler';
