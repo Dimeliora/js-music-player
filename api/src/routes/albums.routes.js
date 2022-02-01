@@ -2,22 +2,22 @@ const { Router } = require('express');
 
 const {
     getAlbumsData,
-    getAlbumsCoverImages,
-    getAlbumsTracklist,
+    getAlbumCoverImage,
+    getAlbumTracklist,
     checkAlbumTrackExistance,
     getAlbumTrack,
-} = require('../controllers/albums.controller');
+} = require('../controllers/albums-controller');
 
 const albumsRouter = Router();
 
 albumsRouter.get('/', getAlbumsData);
 
-albumsRouter.get('/cover/:id', getAlbumsCoverImages);
+albumsRouter.get('/cover/:id', getAlbumCoverImage);
 
-albumsRouter.get('/tracklist/:id', getAlbumsTracklist);
+albumsRouter.get('/tracklist/:id', getAlbumTracklist);
 
 albumsRouter.head('/:albumId/:trackId', checkAlbumTrackExistance);
 
 albumsRouter.get('/:albumId/:trackId', getAlbumTrack);
 
-exports.albumsRouter = albumsRouter;
+module.exports = albumsRouter;
