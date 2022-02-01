@@ -1,25 +1,35 @@
-import { BASE_URL, ALBUM_COVER_PLACEHOLDER_URL } from '../constants/constants';
+import axios from 'axios';
+
+import { BASE_URL } from '../config/base-url';
+
+const albumsService = axios.create({
+    baseURL: `${BASE_URL}/albums`,
+});
 
 export const getAlbumsData = async () => {
-    const response = await fetch(`${BASE_URL}/albums`);
+    try {
+        const { data } = await albumsService.get('/');
 
-    if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message);
+        return data;
+    } catch (error) {
+        if (!error.response) {
+            throw new Error('Service is unreachable');
+        }
+
+        throw new Error(error.response.data.message);
     }
-
-    return response.json();
 };
 
 export const getAlbumsCoverImages = async (albumsData) => {
     const requests = albumsData.map(async (album) => {
-        const response = await fetch(`${BASE_URL}/albums/cover/${album.id}`);
+        try {
+            const { data } = await albumsService.get(`/cover/${album.id}`, {
+                responseType: 'blob',
+            });
 
-        if (response.ok) {
-            const coverImageData = await response.blob();
-            album.cover = URL.createObjectURL(coverImageData);
-        } else {
-            album.cover = ALBUM_COVER_PLACEHOLDER_URL;
+            album.cover = URL.createObjectURL(data);
+        } catch (error) {
+            album.cover = null;
         }
 
         return album;
@@ -29,24 +39,29 @@ export const getAlbumsCoverImages = async (albumsData) => {
 };
 
 export const getAlbumTracklist = async (albumId) => {
-    const response = await fetch(`${BASE_URL}/albums/tracklist/${albumId}`);
+    try {
+        const { data } = await albumsService.get(`/tracklist/${albumId}`);
 
-    if (!response.ok) {
-        const { message } = await response.json();
-        throw new Error(message);
+        return data;
+    } catch (error) {
+        if (!error.response) {
+            throw new Error('Service is unreachable');
+        }
+
+        throw new Error(error.response.data.message);
     }
-
-    return response.json();
 };
 
 export const getTrackFile = async (albumId, trackId) => {
-    const response = await fetch(`${BASE_URL}/albums/${albumId}/${trackId}`, {
-        method: 'HEAD',
-    });
+    try {
+        await albumsService.head(`/${albumId}/${trackId}`);
 
-    if (!response.ok) {
-        throw new Error('Audiofile not found');
+        return `${BASE_URL}/albums/${albumId}/${trackId}`;
+    } catch (error) {
+        if (!error.response) {
+            throw new Error('Service is unreachable');
+        }
+
+        throw new Error('Track file not found');
     }
-
-    return `${BASE_URL}/albums/${albumId}/${trackId}`;
 };
