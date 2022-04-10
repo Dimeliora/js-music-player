@@ -1,7 +1,7 @@
-import playerState from '../../state/player-state';
-import { ee } from '../../helpers/event-emitter';
-import { playerElms } from './player-dom-elements';
-import { isTouchDevice } from '../../helpers/touch-device-check';
+import playerState from "../../state/player-state";
+import { ee } from "../../helpers/event-emitter";
+import { playerElms } from "./player-dom-elements";
+import { isTouchDevice } from "../../helpers/touch-device-check";
 
 const calcCanvasAndPointWidth = () => {
     let canvasWidth = 370;
@@ -21,10 +21,10 @@ const POINTS_COUNT = 100;
 const CANVAS_X_PADDING = 30;
 const CANVAS_HEIGHT = 42;
 const DEFAULT_WAVEFORM_DATA = Array(POINTS_COUNT).fill(100);
-const POINT_FILL_COLOR = '#5c4e16';
-const POINT_BUFFERED_COLOR = '#927916';
-const POINT_PLAYED_COLOR = '#ffcd06';
-const POINT_HOVER_COLOR = '#e6e481';
+const POINT_FILL_COLOR = "#5c4e16";
+const POINT_BUFFERED_COLOR = "#927916";
+const POINT_PLAYED_COLOR = "#ffcd06";
+const POINT_HOVER_COLOR = "#e6e481";
 
 let [canvasWidth, pointWidth, pointMargin] = calcCanvasAndPointWidth();
 
@@ -32,7 +32,7 @@ const canvas = playerElms.playerProgressElm;
 
 canvas.width = canvasWidth;
 canvas.height = CANVAS_HEIGHT;
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext("2d");
 
 let hoverXCoord;
 let lastPlayedPoint = 0;
@@ -82,6 +82,8 @@ export const renderWaveForm = (
         const isPointPlayed = index < lastPlayedPoint;
         const isPointBuffered = index < lastBufferedPoint;
 
+        ctx.fillStyle = POINT_FILL_COLOR;
+
         if (isPointBuffered) {
             ctx.fillStyle = POINT_BUFFERED_COLOR;
         }
@@ -91,19 +93,16 @@ export const renderWaveForm = (
         if (isPointHovered) {
             ctx.fillStyle = POINT_HOVER_COLOR;
         }
-        if (!isPointBuffered && !isPointHovered) {
-            ctx.fillStyle = POINT_FILL_COLOR;
-        }
 
         ctx.fill();
     });
 };
 
-ee.on('player/audio-source-changed', () => {
+ee.on("player/audio-source-changed", () => {
     lastBufferedPoint = 0;
 });
 
-ee.on('player/data-buffering', (bufferedTime) => {
+ee.on("player/data-buffering", (bufferedTime) => {
     const { selectedTrack } = playerState;
 
     const trackBufferedTime = bufferedTime / selectedTrack.duration;
@@ -120,7 +119,7 @@ ee.on('player/data-buffering', (bufferedTime) => {
     );
 });
 
-ee.on('player/time-updated', (currentTime) => {
+ee.on("player/time-updated", (currentTime) => {
     const { selectedTrack } = playerState;
 
     const trackProgress = currentTime / selectedTrack.duration;
@@ -137,13 +136,13 @@ ee.on('player/time-updated', (currentTime) => {
     );
 });
 
-canvas.addEventListener('mousemove', ({ layerX }) => {
+canvas.addEventListener("mousemove", ({ offsetX }) => {
     const { selectedTrack } = playerState;
     if (!selectedTrack || isTouchDevice()) {
         return;
     }
 
-    hoverXCoord = layerX;
+    hoverXCoord = offsetX;
     requestAnimationFrame(() =>
         renderWaveForm(
             selectedTrack.waveformData,
@@ -154,7 +153,7 @@ canvas.addEventListener('mousemove', ({ layerX }) => {
     );
 });
 
-canvas.addEventListener('mouseleave', () => {
+canvas.addEventListener("mouseleave", () => {
     const { selectedTrack } = playerState;
     if (!selectedTrack || isTouchDevice()) {
         return;
@@ -171,19 +170,19 @@ canvas.addEventListener('mouseleave', () => {
     );
 });
 
-canvas.addEventListener('click', ({ layerX }) => {
+canvas.addEventListener("click", ({ offsetX }) => {
     const { selectedTrack } = playerState;
     if (!selectedTrack) {
         return;
     }
 
     ee.emit(
-        'progress/time-update',
-        (selectedTrack.duration * layerX) / canvasWidth
+        "progress/time-update",
+        (selectedTrack.duration * offsetX) / canvasWidth
     );
 });
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
     let waveformData = playerState.selectedTrack?.waveformData;
     if (!waveformData) {
         waveformData = DEFAULT_WAVEFORM_DATA;
